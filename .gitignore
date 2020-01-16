@@ -1,4 +1,10 @@
 /bin
 /bin-int
+/vendor/*
+!/vendor/bin
 Makefile
 *.make
+
+.vs
+*.sln
+*.vcx*

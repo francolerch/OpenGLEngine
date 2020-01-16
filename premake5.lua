@@ -1,6 +1,7 @@
 workspace "Game"
     architecture "x86_64"
     configurations { "Debug", "Release" }
+    startproject "Game"
 
     flags {
 		"MultiProcessorCompile"
@@ -57,7 +58,7 @@ project "Game"
         staticruntime "On"
 
         links {
-            "GLFW_INCLUDE_NONE",
+            "GLFW",
             "Glad"
         }
 
