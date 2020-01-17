@@ -29,6 +29,7 @@ project "OpenGLEngine"
     IncludeDir = {}
     IncludeDir["GLFW"] = "vendor/glfw/include"
     IncludeDir["Glad"] = "vendor/Glad/include"
+    IncludeDir["stb_image"] = "vendor/stb_image"
 
     files {
         "src/**.h",
@@ -39,7 +40,8 @@ project "OpenGLEngine"
         "%{prj.name}/src",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.GLFW}/../deps",
-        "%{IncludeDir.Glad}"
+        "%{IncludeDir.Glad}",
+        "%{IncludeDir.stb_image}"
     }
     filter "system:linux"
         staticruntime "On"

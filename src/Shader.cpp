@@ -113,7 +113,7 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 	glAttachShader(program, fs);
 
 	glLinkProgram(program);
-	//glValidateProgram(program);
+	glValidateProgram(program);
 
 	glDeleteShader(vs);
 	glDeleteShader(fs);
