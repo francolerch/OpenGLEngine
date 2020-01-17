@@ -1,7 +1,7 @@
-workspace "Game"
+workspace "OpenGLEngine"
     architecture "x86_64"
     configurations { "Debug", "Release" }
-    startproject "Game"
+    startproject "OpenGLEngine"
 
     flags {
 		"MultiProcessorCompile"
@@ -15,7 +15,7 @@ group "Dependencies"
 
 group ""
 
-project "Game"
+project "OpenGLEngine"
     kind "ConsoleApp"
     language "C++"
     cppdialect "C++17"
@@ -23,6 +23,8 @@ project "Game"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+    pchheader ("pch.h")
 
     IncludeDir = {}
     IncludeDir["GLFW"] = "vendor/glfw/include"
@@ -56,6 +58,8 @@ project "Game"
     filter "system:windows"
         systemversion "latest"
         staticruntime "On"
+
+        pchsource ("src/pch.cpp")
 
         links {
             "GLFW",

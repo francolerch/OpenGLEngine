@@ -1,5 +1,4 @@
 #pragma once
-#include <array>
 
 struct Vertex {
     float x, y;
@@ -11,14 +10,8 @@ class VertexBuffer
 private:
     unsigned int m_RendererId;
 public:
-    VertexBuffer(std::array<Vertex>& vertexArray);
+    VertexBuffer(const void* data, unsigned int size);
     ~VertexBuffer();
+    void Bind() const;
+    void UnBind() const;
 };
-
-VertexBuffer::VertexBuffer(std::array<Vertex>& vertexArray)
-{
-}
-
-VertexBuffer::~VertexBuffer()
-{
-}

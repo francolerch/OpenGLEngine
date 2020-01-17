@@ -1,18 +1,14 @@
 #pragma once
+#include "VertexBuffer.h"
 
 class VertexArray
 {
 private:
-    /* data */
+    unsigned int m_RendererId;
 public:
-    VertexArray(/* args */);
+    VertexArray();
     ~VertexArray();
+    void AddBuffer(const VertexBuffer& vb);
+    void Bind() const;
+    void Unbind() const;
 };
-
-VertexArray::VertexArray(/* args */)
-{
-}
-
-VertexArray::~VertexArray()
-{
-}
