@@ -5,14 +5,16 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "Shader.h"
 
 float vertices[] = {
-    -1.00f, -0.50f, 0.0f,
-    -0.50f,  0.50f, 0.0f,
-     0.00f, -0.50f, 0.0f,
-     0.50f,  0.50f, 0.0f,
-     1.00f, -0.50f, 0.0f
+    // positions            // colors
+    -1.00f, -0.50f, 0.0f,   1.0f, 0.0f, 0.0f,
+    -0.50f,  0.50f, 0.0f,   0.0f, 1.0f, 0.0f,
+     0.00f, -0.50f, 0.0f,   0.0f, 0.0f, 1.0f,
+     0.50f,  0.50f, 0.0f,   0.0f, 1.0f, 0.0f,
+     1.00f, -0.50f, 0.0f,   1.0f, 0.0f, 0.0f
 };
 
 unsigned int indices[] = {
@@ -59,17 +61,28 @@ int main(void)
     gladLoadGL(glfwGetProcAddress);
     glfwSwapInterval(1);
 
-    Shader shader("res/shaders/FlatColor.glsl");
+    Shader shader("res/shaders/ChangingColor.glsl");
     shader.Bind();
     VertexArray va;
-    VertexBuffer vb(vertices, 5 * 3 * sizeof(float));
-    va.AddBuffer(vb);
+    VertexBuffer vb(vertices, std::size(vertices) * sizeof(vertices[0]));
+    VertexBufferLayout layout;
+    layout.Push<float>(2);
+
+    va.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
 
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window))
     {
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        float timeValue = glfwGetTime();
+        float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+
+        shader.SetUniform4f("u_Color", 1.0f, greenValue, 1.0f, 1.0f);
+
         glDrawElements(GL_TRIANGLES, std::size(indices), GL_UNSIGNED_INT, 0);
  
         glfwSwapBuffers(window);
