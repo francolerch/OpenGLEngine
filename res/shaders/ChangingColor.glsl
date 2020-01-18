@@ -32,6 +32,7 @@ out vec4 FragColor;
 uniform sampler2D ourTexture;
 uniform sampler2D texture2;
 uniform vec4 u_Color;
+uniform float u_Opacity;
 
 void main()
 {

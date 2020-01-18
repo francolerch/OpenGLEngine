@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "RendererCore.h"
-#include "linmath.h"
+//#include "linmath.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -9,6 +9,7 @@
 #include "IndexBuffer.h"
 #include "VertexBufferLayout.h"
 #include "Shader.h"
+#include "Texture.h"
 
 float vertices[] = {
     // positions            // colors           // texture coords
@@ -34,11 +35,17 @@ static void error_callback(int error, const char* description)
 {
     std::cerr << "(" << error << ")" << "Error: %s\n" << description << std::endl;
 }
- 
+
+float opacity = 0.0f;
+
 static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GLFW_TRUE);
+    else if (key == GLFW_KEY_UP && action == GLFW_PRESS)
+        opacity += 0.5f;
+    else if (key == GLFW_KEY_DOWN && action == GLFW_PRESS)
+        opacity -= 0.5f;
 }
  
 int main(void)
@@ -63,7 +70,11 @@ int main(void)
     glfwSetKeyCallback(window, key_callback);
  
     glfwMakeContextCurrent(window);
-    gladLoadGL(glfwGetProcAddress);
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
     glfwSwapInterval(1);
 
     Shader shader("res/shaders/ChangingColor.glsl");
@@ -77,40 +88,7 @@ int main(void)
 
     va.AddBuffer(vb, layout);
     IndexBuffer ib(indices, 6);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    stbi_set_flip_vertically_on_load(true);
-
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load("res/textures/wall.jpg", &width, &height, &nrChannels, 0);
-
-    unsigned int texture, texture2;
-    glGenTextures(1, &texture);
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-     data = stbi_load("res/textures/awesomeface.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    glGenTextures(1, &texture2);
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, texture2);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    stbi_image_free(data);
-    
+    Texture tex("res/textures/container.jpg");
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     while (!glfwWindowShouldClose(window))
@@ -118,9 +96,14 @@ int main(void)
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, tex.Get());
+
+
         float timeValue = glfwGetTime();
         float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 
+        shader.SetUniform1f("u_Opacity", opacity);
         shader.SetUniform1f("u_Time", timeValue);
         shader.SetUniform4f("u_Color", 1.0f, greenValue, 1.0f, 1.0f);
 
