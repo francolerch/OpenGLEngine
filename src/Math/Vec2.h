@@ -1,12 +1,11 @@
 #pragma once
 #include "Math.h"
-#include "Point.h"
 
 template<typename T>
 struct _Vec2
 {
-	_Point<T> x;
-	_Point<T> y;
+	T x;
+	T y;
 
 	_Vec2() = delete;
 	_Vec2(T x, T y) : x(x), y(y) {};

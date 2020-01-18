@@ -5,10 +5,11 @@
 template<typename T>
 struct _Vec3 : public _Vec2<T>
 {
-	_Point<T> z;
+	T z;
 
 	_Vec3() = delete;
-	_Vec3(T x, T y, T z) : x(x), y(y), z(z) {};
+	_Vec3(T x, T y, T z) : _Vec2(x, y), z(z) {};
+	_Vec3(_Vec2<T> v2, T z) : _Vec2(v2), z(z) {};
 	virtual ~_Vec3() {};
 	template <typename T2>
 	explicit operator _Vec3<T2>() const

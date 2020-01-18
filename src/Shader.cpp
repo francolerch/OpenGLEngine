@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "Shader.h"
 #include "RendererCore.h"
-
-
+#include <glm/gtc/type_ptr.hpp>
 
 Shader::Shader(const std::string& filepath)
 	: m_Filepath(filepath), m_RendererID(0)
@@ -76,13 +75,13 @@ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2,
 		glUniform4f(location, v0, v1, v2, v3);
 }
 
-/*void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
+void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
 {
 	int location = GetUniformLocation(name);
 	if (location != -1)
-		glUniformMatrix4fv(location, 1, GL_FALSE, &matrix[0][0]));
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
-*/
+
 int Shader::GetUniformLocation(const std::string& name) const
 {
 	if (m_UniformLocationCache.find(name) != m_UniformLocationCache.end())

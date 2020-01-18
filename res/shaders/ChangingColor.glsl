@@ -10,12 +10,16 @@ out vec4 ourPosition;
 out vec2 texCoord;
 
 uniform float u_Time;
+uniform mat4 u_Transform;
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
 
 void main()
 {
     float s = sin(u_Time) * 0.5 + 1;
     ourPosition = vec4(aPos.xyz * s, 1.0);
-    gl_Position = ourPosition;
+    gl_Position =  projection * view * model * u_Transform * vec4(aPos, 1.0);
     ourColor = aColor;
     texCoord = aTexCoord;
 };
@@ -36,6 +40,6 @@ uniform float u_Opacity;
 
 void main()
 {
-    vec4 tex = mix(texture(ourTexture, texCoord), texture(texture2, texCoord), 0.2);
-    FragColor = clamp(ourPosition.xyzw, 0.5, 1.0) * tex * vec4(ourColor.rgb * u_Color.rgb, 1.0);
+    vec4 tex = texture(ourTexture, texCoord);
+    FragColor = tex;
 };
