@@ -23,7 +23,7 @@ namespace OGLE {
 		float pitch = 0.0f;
 		float lastX = 640.0f / 2.0;
 		float lastY = 480.0 / 2.0;
-		float fov = 45.0f;
+		float fov = 60.0f;
 
 		float mouseXpos = 0.;
 		float mouseYpos = 0.;

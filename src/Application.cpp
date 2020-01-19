@@ -102,7 +102,7 @@ namespace OGLE {
         glEnable(GL_DEPTH_TEST);
         glfwSwapInterval(1);
 
-        Shader shader("res/shaders/ChangingColor.glsl");
+        Shader shader("res/shaders/DepthTesting.glsl");
         shader.Bind();
         VertexArray va;
         VertexBuffer vb(vertices, std::size(vertices) * sizeof(vertices[0]));
@@ -124,7 +124,7 @@ namespace OGLE {
         model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
         glm::mat4 proj;
-        proj = glm::perspective(glm::radians(45.f), WIDTH / HEIGHT, 0.1f, 100.0f);
+        proj = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
 
         while (!glfwWindowShouldClose(m_Window))
         {
@@ -150,7 +150,7 @@ namespace OGLE {
 
             glm::mat4 view = glm::lookAt(m_Camera.GetCameraPos(), m_Camera.GetCameraFront() + m_Camera.GetCameraPos(), m_Camera.GetCameraUp());
 
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+            glClearColor(.0f, 0.0f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glActiveTexture(GL_TEXTURE0);
@@ -162,13 +162,7 @@ namespace OGLE {
 
 
 
-
             shader.SetUniformMat4f("u_Transform", trans);
-
-            shader.SetUniformMat4f("model", model);
-            shader.SetUniformMat4f("view", view);
-            shader.SetUniformMat4f("projection", proj);
-
             shader.SetUniform4f("u_Color", 1.0f, greenValue, 1.0f, 1.0f);
 
             va.Bind();
@@ -178,7 +172,9 @@ namespace OGLE {
                 model = glm::translate(model, cubePositions[i]);
                 float angle = 20.0f * i;
                 model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                shader.SetUniformMat4f("model", model);
+                glm::mat4 mvp = proj * view * model;
+
+                shader.SetUniformMat4f("u_Mvp", mvp);
 
                 glDrawElements(GL_TRIANGLES, std::size(indices), GL_UNSIGNED_INT, 0);
             }
