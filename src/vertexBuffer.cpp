@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "VertexBuffer.h"
-#include "RendererCore.h"
+#include "glad/glad.h"
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {

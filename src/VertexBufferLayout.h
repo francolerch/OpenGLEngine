@@ -1,6 +1,7 @@
 #pragma once
 #include "pch.h"
 #include "RendererCore.h"
+#include "glad/glad.h"
 
 struct VertexBufferElement
 {

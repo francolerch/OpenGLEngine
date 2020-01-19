@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <unordered_map>
-#include "Math/Mat.h"
 #include "glm/glm.hpp"
 
 struct ShaderProgramSource
