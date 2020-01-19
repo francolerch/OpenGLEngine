@@ -25,12 +25,14 @@ project "OpenGLEngine"
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
     pchheader ("pch.h")
+    pchsource ("src/pch.cpp")
 
     IncludeDir = {}
     IncludeDir["GLFW"] = "vendor/glfw/include"
     IncludeDir["Glad"] = "vendor/Glad/include"
     IncludeDir["stb_image"] = "vendor/stb_image"
     IncludeDir["glm"] = "vendor/glm"
+    IncludeDir["spdlog"] = "vendor/spdlog/include"
 
     files {
         "src/**.h",
@@ -40,10 +42,10 @@ project "OpenGLEngine"
     includedirs {
         "%{prj.name}/src",
         "%{IncludeDir.GLFW}",
-        --"%{IncludeDir.GLFW}/../deps",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.stb_image}",
-        "%{IncludeDir.glm}"
+        "%{IncludeDir.glm}",
+        "%{IncludeDir.spdlog}"
     }
     filter "system:linux"
         staticruntime "On"
@@ -62,8 +64,6 @@ project "OpenGLEngine"
     filter "system:windows"
         systemversion "latest"
         staticruntime "On"
-
-        pchsource ("src/pch.cpp")
 
         links {
             "GLFW",

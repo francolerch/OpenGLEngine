@@ -19,14 +19,13 @@ namespace OGLE {
 
     static void error_callback(int error, const char* description)
     {
-        std::cerr << "(" << error << ")" << "Error: %s\n" << description << std::endl;
+        OG_ERROR("GLFW Error ({0}): {1}", error, description);
     }
 
     Application::Application()
     {
-        if (s_Instance == nullptr)
-            s_Instance = this;
-
+        OG_ASSERT(!s_Instance, "Application already exists!");
+        s_Instance = this;
 
         if (!glfwInit())
             exit(EXIT_FAILURE);
@@ -90,10 +89,14 @@ namespace OGLE {
         glfwSetKeyCallback(m_Window, key_callback);
 
         glfwMakeContextCurrent(m_Window);
-        if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-        {
-            std::cout << "Failed to initialize GLAD" << std::endl;
-        }
+        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+        OG_ASSERT(status, "Failed to initialize Glad!");
+       
+
+        OG_INFO("OpenGL Info:");
+        OG_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
+        OG_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
+        OG_INFO("  Version: {0}", glGetString(GL_VERSION));
 
         //glfwSetFramebufferSizeCallback(m_Window, FramebufferSizeCallback);
         //glfwSetScrollCallback(m_Window, ScrollCallback);

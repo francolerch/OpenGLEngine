@@ -28,13 +28,14 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 	glGetShaderiv(id, GL_COMPILE_STATUS, &result);
 	if (result == GL_FALSE)
 	{
-		int maxLength;
+		int maxLength = 0;
 		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &maxLength);
+
 		std::vector<GLchar> infoLog(maxLength);
 		glGetShaderInfoLog(id, maxLength, &maxLength, &infoLog[0]);
 
-		std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "vertex " : "fragment") << " shader!" << std::endl;
-		std::cout << infoLog.data() << std::endl;
+		OG_ERROR("{0}", infoLog.data());
+		OG_ASSERT(false, "Shader compilation failed!");
 
 		glDeleteShader(id);
 
@@ -93,7 +94,7 @@ int Shader::GetUniformLocation(const std::string& name) const
 
 	if (location == -1)  // Assert that that location is valid
 	{
-		std::cout << "Warning: uniform '" << name << "' doesn't exist" << std::endl;
+		OG_WARN("Uniform {0} does not exist", name);
 	}
 
 	m_UniformLocationCache[name] = location;
