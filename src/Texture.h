@@ -11,7 +11,7 @@ public:
 	int GetHeight() const { return m_Height; }
 
 	unsigned int Get() const { return m_RendererID; };
-	void Bind() const;
+	void Bind(unsigned int index) const;
 private:
 	std::string m_Path;
 	int m_Width, m_Height;

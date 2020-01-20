@@ -1,17 +1,18 @@
 #type vertex
-#version 330 core
+#version 310 es
 
 layout (location = 0) in vec3 aPos;
 
+uniform mediump mat4 u_Mvp;
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = u_Mvp * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 };
 
 #type fragment
-#version 330 core
+#version 310 es
 
-out vec4 FragColor;
+out mediump vec4 FragColor;
 
 void main()
 {

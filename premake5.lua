@@ -24,8 +24,8 @@ project "OpenGLEngine"
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-    pchheader ("pch.h")
-    pchsource ("src/pch.cpp")
+    --pchheader ("pch.h")
+    --pchsource ("src/pch.cpp")
 
     IncludeDir = {}
     IncludeDir["GLFW"] = "vendor/glfw/include"
@@ -50,6 +50,10 @@ project "OpenGLEngine"
     filter "system:linux"
         staticruntime "On"
 
+        defines {
+            "OG_LINUX"
+        }
+
         links {
             "GLFW",
             "Glad",
@@ -64,6 +68,10 @@ project "OpenGLEngine"
     filter "system:windows"
         systemversion "latest"
         staticruntime "On"
+
+        defines {
+            "OG_WINDOWS"
+        }
 
         links {
             "GLFW",

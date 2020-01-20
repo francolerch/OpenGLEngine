@@ -27,8 +27,8 @@ namespace OGLE {
 
 		GLFWwindow* m_Window;
 		PerspectiveCamera m_Camera;
-		const float WIDTH = 1440.f;
-		const float HEIGHT = 900.f;
+		const float WIDTH = 800.f;
+		const float HEIGHT = 600.f;
 		float deltaTime = 0.0f;	// time between current frame and last frame
 		float lastFrame = 0.0f;
 	};

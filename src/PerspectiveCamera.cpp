@@ -1,3 +1,5 @@
+#pragma once
+
 #include "pch.h"
 #include "PerspectiveCamera.h"
 #include "Input.h"
@@ -39,8 +41,6 @@ namespace OGLE {
 		if (Input::IsKeyPressed(OGLE_KEY_LEFT_SHIFT))
 			m_CameraPos -= m_CameraUp * cameraSpeed;
 
-		m_CameraPos += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed * .4f;
-		m_CameraPos += cameraSpeed * m_CameraFront * .2f;
 		// MOVE THIS TO ANOTHER CLASS
 		if (Input::IsKeyPressed(OGLE_KEY_F2)) 
 		{
@@ -48,7 +48,7 @@ namespace OGLE {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
-		auto& mousePos = Input::GetMousePosition();
+		auto mousePos = Input::GetMousePosition();
 		float xpos = mousePos.first;
 		float ypos = mousePos.second;
 		float xoffset = xpos - mouseXpos;

@@ -1,8 +1,13 @@
 #pragma once
 #include <memory>
 
+#ifdef OG_LINUX
+	#define OG_BREAK __builtin_trap()
+#else
+	#define OG_BREAK __debugbreak()
+#endif
 #ifdef DEBUG
-	#define OG_ASSERT(x, ...) { if(!(x)) { OG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define OG_ASSERT(x, ...) { if(!(x)) { OG_ERROR("Assertion Failed: {0}", __VA_ARGS__); OG_BREAK; } }
 #else
 	#define OG_ASSERT(x, ...)
 #endif

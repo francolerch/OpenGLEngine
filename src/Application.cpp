@@ -1,10 +1,6 @@
 #include "pch.h"
 #include "Application.h"
 
-#include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexBufferLayout.h"
 #include "Shader.h"
 #include "Texture.h"
 
@@ -40,45 +36,54 @@ namespace OGLE {
 
     void Application::Run()
     {
+         float vertices[] = {
+        // positions          // normals           // texture coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-        float vertices[] = {
-            // positions            // colors           // texture coords
-            -1.00f, -1.00f, -.5f,   1.0f, 0.0f, 0.0f,   0.0f, 0.0f,
-             1.00f, -1.00f, -.5f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-             1.00f,  1.00f, -.5f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-            -1.00f,  1.00f, -.5f,   0.0f, 0.0f, 1.0f,   1.0f, 0.0f,
-             0.00f,  0.00f,  1.0f,  0.0f, 0.0f, 1.0f,   0.5f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-        };
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        unsigned int indices[] = {
-            0, 1, 2,
-            2, 3, 0,
-            0, 1, 4,
-            1, 2, 4,
-            2, 3, 4,
-            3, 0, 4
-        };
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        glm::vec3 cubePositions[] = {
-          glm::vec3(0.0f,  0.0f,  0.0f),
-          glm::vec3(2.0f,  5.0f, -15.0f),
-          glm::vec3(-1.5f, -2.2f, -2.5f),
-          glm::vec3(-3.8f, -2.0f, -12.3f),
-          glm::vec3(2.4f, -0.4f, -3.5f),
-          glm::vec3(-1.7f,  3.0f, -7.5f),
-          glm::vec3(1.3f, -2.0f, -2.5f),
-          glm::vec3(1.5f,  2.0f, -2.5f),
-          glm::vec3(1.5f,  0.2f, -1.5f),
-          glm::vec3(-1.3f,  1.0f, -1.5f)
-        };
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
+    };
 
         glfwSetErrorCallback(error_callback);
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        
 
         if (!m_Window)
         {
@@ -91,7 +96,7 @@ namespace OGLE {
         glfwMakeContextCurrent(m_Window);
         int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
         OG_ASSERT(status, "Failed to initialize Glad!");
-       
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
         OG_INFO("OpenGL Info:");
         OG_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
@@ -105,29 +110,42 @@ namespace OGLE {
         glEnable(GL_DEPTH_TEST);
         glfwSwapInterval(1);
 
-        Shader shader("res/shaders/DepthTesting.glsl");
-        shader.Bind();
-        VertexArray va;
-        VertexBuffer vb(vertices, std::size(vertices) * sizeof(vertices[0]));
-        VertexBufferLayout layout;
-        layout.Push<float>(3); // position
-        layout.Push<float>(3); // colors
-        layout.Push<float>(2); // tex coord
+        Shader lightingShader("res/shaders/LightingMap.glsl");
+        Shader lampShader("res/shaders/Lamp.glsl");
 
-        va.AddBuffer(vb, layout);
-        IndexBuffer ib(indices, std::size(indices));
-        Texture tex("res/textures/wall.jpg");
-    
-        glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-        glm::mat4 trans = glm::mat4(1.0f);
-        trans = glm::translate(trans, glm::vec3(-1.0f, 1.0f, 0.0f));
+        Texture diffuseMap("res/textures/container2.png");
+        Texture specularMap("res/textures/container2_specular.png");
 
+        unsigned int VBO, cubeVAO;
+        glGenVertexArrays(1, &cubeVAO);
+        glGenBuffers(1, &VBO);
 
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-        glm::mat4 proj;
-        proj = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
+        glBindVertexArray(cubeVAO);
+
+        // position attribute
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+        // normal attribute
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+        // uv coord
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*) (6* sizeof(float)));
+        glEnableVertexAttribArray(2);
+
+        // second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
+        unsigned int lightVAO;
+        glGenVertexArrays(1, &lightVAO);
+        glBindVertexArray(lightVAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        // note that we update the lamp's position attribute's stride to reflect the updated buffer data
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glm::vec3 lightPos(1.2f, 0.0f, 2.0f);
 
         while (!glfwWindowShouldClose(m_Window))
         {
@@ -145,42 +163,56 @@ namespace OGLE {
             m_Camera.OnUpdate(deltaTime);
 
             // render
-            // ---------------------
-            glm::mat4 trans = glm::mat4(1.0f);
-            trans = glm::translate(trans, glm::vec3(0.5f, -0.5f, 0.0f));
-            trans = glm::rotate(trans, (float)glfwGetTime(), glm::vec3(0.5f, 0.7f, 1.0f));
+        // ------
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        // be sure to activate shader when setting uniforms/drawing objects
+        lightingShader.Bind();
+        lightingShader.SetUniform3f("objectColor", 1.0f, 0.7f, 0.3f);
+        lightingShader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
+        lightingShader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+        lightingShader.SetUniform3f("viewPos", m_Camera.GetCameraPos().x, m_Camera.GetCameraPos().y, m_Camera.GetCameraPos().z);
 
-            glm::mat4 view = glm::lookAt(m_Camera.GetCameraPos(), m_Camera.GetCameraFront() + m_Camera.GetCameraPos(), m_Camera.GetCameraUp());
+        // material properties
+        diffuseMap.Bind(0);
+        specularMap.Bind(1);
+        lightingShader.SetUniform1i("material.diffuse", 0);
+        lightingShader.SetUniform1i("material.specular", 1);
+        lightingShader.SetUniform1f("material.shininess", 32.0f);
 
-            glClearColor(.0f, 0.0f, 0.1f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // light properties
+        lightingShader.SetUniform3f("light.ambient", 0.3f, 0.3f, 0.3f);
+        lightingShader.SetUniform3f("light.diffuse", 0.5f, 0.5f, 0.5f);
+        lightingShader.SetUniform3f("light.specular", 1.0f, 1.0f, 1.0f); 
 
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, tex.Get());
+        // view/projection transformations
+        glm::mat4 projection = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
+        glm::mat4 view = glm::lookAt(m_Camera.GetCameraPos(), m_Camera.GetCameraFront() + m_Camera.GetCameraPos(), m_Camera.GetCameraUp());
+        lightingShader.SetUniformMat4f("projection", projection);
+        lightingShader.SetUniformMat4f("view", view);
 
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.f, 1.f, 0.f));
+        lightingShader.SetUniformMat4f("model", model);
 
+        // render the cube
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            float greenValue = 1.f;//(sin(startTime) / 2.0f) + 0.5f;
+        glBindTexture(GL_TEXTURE_2D, 0);
+        // also draw the lamp object
+        lampShader.Bind();
+        lampShader.SetUniformMat4f("projection", projection);
+        lampShader.SetUniformMat4f("view", view);
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, lightPos);
+        model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
+        lampShader.SetUniformMat4f("model", model);
 
-
-
-            shader.SetUniformMat4f("u_Transform", trans);
-            shader.SetUniform4f("u_Color", 1.0f, greenValue, 1.0f, 1.0f);
-
-            va.Bind();
-            for (unsigned int i = 0; i < 10; i++)
-            {
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, cubePositions[i]);
-                float angle = 20.0f * i;
-                model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-                glm::mat4 mvp = proj * view * model;
-
-                shader.SetUniformMat4f("u_Mvp", mvp);
-
-                glDrawElements(GL_TRIANGLES, std::size(indices), GL_UNSIGNED_INT, 0);
-            }
+        glBindVertexArray(lightVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
             glfwSwapBuffers(m_Window);
@@ -195,35 +227,6 @@ namespace OGLE {
 
     void Application::MouseCallback(GLFWwindow* m_Window, double xpos, double ypos)
     {
-    /*    if (firstMouse)
-        {
-            lastX = xpos;
-            lastY = ypos;
-            firstMouse = false;
-        }
-
-        float xoffset = xpos - lastX;
-        float yoffset = lastY - ypos;
-        lastX = xpos;
-        lastY = ypos;
-
-        float sensitivity = 0.1;
-        xoffset *= sensitivity;
-        yoffset *= sensitivity;
-
-        yaw += xoffset;
-        pitch += yoffset;
-
-        if (pitch > 89.0f)
-            pitch = 89.0f;
-        if (pitch < -89.0f)
-            pitch = -89.0f;
-
-        glm::vec3 direction;
-        direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        direction.y = sin(glm::radians(pitch));
-        direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-        cameraFront = glm::normalize(direction);*/
     }
 
     void Application::ScrollCallback(GLFWwindow* m_Window, double xoffset, double yoffset)
