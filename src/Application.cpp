@@ -81,6 +81,19 @@ namespace OGLE {
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
+         glm::vec3 cubePositions[] = {
+            glm::vec3(0.0f,  0.0f,  0.0f),
+            glm::vec3(2.0f,  5.0f, -15.0f),
+            glm::vec3(-1.5f, -2.2f, -2.5f),
+            glm::vec3(-3.8f, -2.0f, -12.3f),
+            glm::vec3(2.4f, -0.4f, -3.5f),
+            glm::vec3(-1.7f,  3.0f, -7.5f),
+            glm::vec3(1.3f, -2.0f, -2.5f),
+            glm::vec3(1.5f,  2.0f, -2.5f),
+            glm::vec3(1.5f,  0.2f, -1.5f),
+            glm::vec3(-1.3f,  1.0f, -1.5f)
+         };
+
         glfwSetErrorCallback(error_callback);
 
         
@@ -182,9 +195,14 @@ namespace OGLE {
         lightingShader.SetUniform1f("material.shininess", 32.0f);
 
         // light properties
+        lightingShader.SetUniform3f("light.direction", -0.2f, -1.0f, -0.3f);
         lightingShader.SetUniform3f("light.ambient", 0.3f, 0.3f, 0.3f);
         lightingShader.SetUniform3f("light.diffuse", 0.5f, 0.5f, 0.5f);
         lightingShader.SetUniform3f("light.specular", 1.0f, 1.0f, 1.0f); 
+
+        lightingShader.SetUniform1f("light.constant", 1.0f);
+        lightingShader.SetUniform1f("light.linear", 0.09f);
+        lightingShader.SetUniform1f("light.quadratic", 0.032f);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
@@ -199,7 +217,16 @@ namespace OGLE {
 
         // render the cube
         glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        for (unsigned int i = 0; i < 10; i++)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, cubePositions[i]);
+            float angle = 20.0f * i;
+            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+            lightingShader.SetUniformMat4f("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         glBindTexture(GL_TEXTURE_2D, 0);
         // also draw the lamp object

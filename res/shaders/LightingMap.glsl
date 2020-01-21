@@ -34,10 +34,15 @@ uniform mediump vec3 lightColor;
 uniform mediump vec3 objectColor;
 
 struct Light {
-    mediump vec3 position;
+    mediump vec3 position;  
+    mediump vec3 direction;
     mediump vec3 ambient;
     mediump vec3 diffuse;
     mediump vec3 specular;
+
+    mediump float constant;
+    mediump float linear;
+    mediump float quadratic;
 };
 
 uniform Light light; 
@@ -45,7 +50,7 @@ uniform Light light;
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
-    float     shininess;
+    mediump float shininess;
 };
   
 uniform Material material;
@@ -58,6 +63,8 @@ void main()
     // diffuse 
     mediump vec3 norm = normalize(Normal);
     mediump vec3 lightDir = normalize(lightPos - FragPos);
+
+    //mediump vec3 lightDir = normalize(-light.direction);
     mediump float diff = max(dot(norm, lightDir), 0.0);
     mediump vec3 diffuse = light.diffuse * lightColor * (diff * vec3(texture(material.diffuse, TexCoords))); 
     
@@ -67,6 +74,12 @@ void main()
     mediump float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     mediump vec3 specular = light.specular * lightColor * spec * vec3(texture(material.specular, TexCoords));
         
+    mediump float distance = length(light.position - FragPos);
+    mediump float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance)); 
+    ambient  *= attenuation; 
+    diffuse  *= attenuation;
+    specular *= attenuation;   
+
     mediump vec3 result = ambient + diffuse + specular;
     FragColor = vec4(result, 1.0);
 } 
