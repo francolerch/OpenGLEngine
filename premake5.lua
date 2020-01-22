@@ -30,9 +30,10 @@ project "OpenGLEngine"
     IncludeDir = {}
     IncludeDir["GLFW"] = "vendor/glfw/include"
     IncludeDir["Glad"] = "vendor/Glad/include"
-    IncludeDir["stb_image"] = "vendor/stb_image"
     IncludeDir["glm"] = "vendor/glm"
     IncludeDir["spdlog"] = "vendor/spdlog/include"
+    IncludeDir["assimp"] = "vendor/assimp/include"
+    IncludeDir["stb_image"] = "vendor/stb_image"
 
     files {
         "src/**.h",
@@ -40,13 +41,19 @@ project "OpenGLEngine"
     }
 
     includedirs {
-        "%{prj.name}/src",
+        "src",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.Glad}",
-        "%{IncludeDir.stb_image}",
         "%{IncludeDir.glm}",
-        "%{IncludeDir.spdlog}"
+        "%{IncludeDir.spdlog}",
+        "%{IncludeDir.assimp}",
+        "%{IncludeDir.stb_image}"
     }
+
+    libdirs {
+        "vendor/assimp/lib"
+    }
+
     filter "system:linux"
         staticruntime "On"
 
@@ -62,7 +69,8 @@ project "OpenGLEngine"
             "Xrandr",
             "Xi",
             "dl",
-            "X11"
+            "X11",
+            "assimp"
         }
     
     filter "system:windows"

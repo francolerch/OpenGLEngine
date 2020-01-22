@@ -13,6 +13,7 @@
             "label": "make",
             "type": "shell",
             "command": "make",
+            "args": ["-j4"],
             "group": {
                 "kind": "build",
                 "isDefault": true

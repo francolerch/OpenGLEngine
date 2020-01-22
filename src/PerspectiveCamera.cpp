@@ -1,5 +1,3 @@
-#pragma once
-
 #include "pch.h"
 #include "PerspectiveCamera.h"
 #include "Input.h"
@@ -48,7 +46,14 @@ namespace OGLE {
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
+		
 		auto mousePos = Input::GetMousePosition();
+		if(firstMouse)
+		{
+			lastX = mousePos.first;
+			lastY = mousePos.second;
+			firstMouse = false;
+		}
 		float xpos = mousePos.first;
 		float ypos = mousePos.second;
 		float xoffset = xpos - mouseXpos;

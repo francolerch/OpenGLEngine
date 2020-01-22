@@ -2,7 +2,8 @@
 #include "Application.h"
 
 #include "Shader.h"
-#include "Texture.h"
+#include "Model.h"
+//#include "Texture.h"
 
 namespace OGLE {
     Application* Application::s_Instance;
@@ -118,16 +119,19 @@ namespace OGLE {
 
         //glfwSetFramebufferSizeCallback(m_Window, FramebufferSizeCallback);
         //glfwSetScrollCallback(m_Window, ScrollCallback);
-        glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        //glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         glEnable(GL_DEPTH_TEST);
         glfwSwapInterval(1);
 
-        Shader lightingShader("res/shaders/LightingMap.glsl");
+        //Shader lightingShader("res/shaders/LightingMap.glsl");
         Shader lampShader("res/shaders/Lamp.glsl");
+        Shader ourShader("res/shaders/model_loading.glsl");
 
-        Texture diffuseMap("res/textures/container2.png");
-        Texture specularMap("res/textures/container2_specular.png");
+        Model ourModel("res/models/nanosuit/nanosuit.obj");
+
+        //Texture diffuseMap("res/textures/container2.png");
+        //Texture specularMap("res/textures/container2_specular.png");
 
         unsigned int VBO, cubeVAO;
         glGenVertexArrays(1, &cubeVAO);
@@ -180,55 +184,66 @@ namespace OGLE {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // be sure to activate shader when setting uniforms/drawing objects
-        lightingShader.Bind();
-        lightingShader.SetUniform3f("objectColor", 1.0f, 0.7f, 0.3f);
-        lightingShader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
-        lightingShader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
-        lightingShader.SetUniform3f("viewPos", m_Camera.GetCameraPos().x, m_Camera.GetCameraPos().y, m_Camera.GetCameraPos().z);
 
-        // material properties
-        diffuseMap.Bind(0);
-        specularMap.Bind(1);
-        lightingShader.SetUniform1i("material.diffuse", 0);
-        lightingShader.SetUniform1i("material.specular", 1);
-        lightingShader.SetUniform1f("material.shininess", 32.0f);
 
-        // light properties
-        lightingShader.SetUniform3f("light.direction", -0.2f, -1.0f, -0.3f);
-        lightingShader.SetUniform3f("light.ambient", 0.3f, 0.3f, 0.3f);
-        lightingShader.SetUniform3f("light.diffuse", 0.5f, 0.5f, 0.5f);
-        lightingShader.SetUniform3f("light.specular", 1.0f, 1.0f, 1.0f); 
 
-        lightingShader.SetUniform1f("light.constant", 1.0f);
-        lightingShader.SetUniform1f("light.linear", 0.09f);
-        lightingShader.SetUniform1f("light.quadratic", 0.032f);
+
+        ourShader.Bind();
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = glm::lookAt(m_Camera.GetCameraPos(), m_Camera.GetCameraFront() + m_Camera.GetCameraPos(), m_Camera.GetCameraUp());
-        lightingShader.SetUniformMat4f("projection", projection);
-        lightingShader.SetUniformMat4f("view", view);
+        ourShader.SetUniformMat4f("projection", projection);
+        ourShader.SetUniformMat4f("view", view);
+
+        // render the loaded model
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+        ourShader.SetUniformMat4f("model", model);
+
+
+
+        // be sure to activate shader when setting uniforms/drawing objects
+        //ourShader.Bind();
+        ourShader.SetUniform3f("objectColor", 1.0f, 0.7f, 0.3f);
+        ourShader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
+        ourShader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+        ourShader.SetUniform3f("viewPos", m_Camera.GetCameraPos().x, m_Camera.GetCameraPos().y, m_Camera.GetCameraPos().z);
+
+        // material properties
+        //diffuseMap.Bind(0);
+        //specularMap.Bind(1);
+        //lightingShader.SetUniform1i("material.diffuse", 0);
+        //lightingShader.SetUniform1i("material.specular", 1);
+        ourShader.SetUniform1f("material.shininess", 32.0f);
+
+        // light properties
+        ourShader.SetUniform3f("light.direction", -0.2f, -1.0f, -0.3f);
+        ourShader.SetUniform3f("light.ambient", 0.3f, 0.3f, 0.3f);
+        ourShader.SetUniform3f("light.diffuse", 0.5f, 0.5f, 0.5f);
+        ourShader.SetUniform3f("light.specular", 1.0f, 1.0f, 1.0f); 
+
+        ourShader.SetUniform1f("light.constant", 1.0f);
+        ourShader.SetUniform1f("light.linear", 0.09f);
+        ourShader.SetUniform1f("light.quadratic", 0.032f);
+
+        // view/projection transformations
+        ourShader.SetUniformMat4f("projection", projection);
+        ourShader.SetUniformMat4f("view", view);
 
         // world transformation
-        glm::mat4 model = glm::mat4(1.0f);
         model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.f, 1.f, 0.f));
-        lightingShader.SetUniformMat4f("model", model);
+        ourShader.SetUniformMat4f("model", model);
 
-        // render the cube
-        glBindVertexArray(cubeVAO);
-        for (unsigned int i = 0; i < 10; i++)
-        {
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            lightingShader.SetUniformMat4f("model", model);
+        ourModel.Draw(ourShader);
 
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
 
-        glBindTexture(GL_TEXTURE_2D, 0);
+
+
+
+/*
+        //glBindTexture(GL_TEXTURE_2D, 0);
         // also draw the lamp object
         lampShader.Bind();
         lampShader.SetUniformMat4f("projection", projection);
@@ -240,6 +255,12 @@ namespace OGLE {
 
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
+*/
+
+
 
 
             glfwSwapBuffers(m_Window);

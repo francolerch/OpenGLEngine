@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "Texture.h"
 #include "glad/glad.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+
 
 Texture::Texture(const std::string& path)
 	: m_Path(path)
@@ -18,9 +17,9 @@ Texture::Texture(const std::string& path)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load image, create texture and generate mipmaps
-    stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+    //stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 
-    unsigned char *data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
+    unsigned char *data;// = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
 
     OG_ASSERT(data, "Failed to load texture");
 
