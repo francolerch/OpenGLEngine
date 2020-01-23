@@ -1,12 +1,11 @@
 #include "pch.h"
-#include "PerspectiveCamera.h"
-#include "Input.h"
-#include "Keycodes.h"
-#include "Application.h"
+#include "Entities/PerspectiveCamera.h"
+#include "Core/Input/Input.h"
+#include "Core/Input/Keycodes.h"
 
 namespace OGLE {
 	PerspectiveCamera::PerspectiveCamera() :
-		m_CameraPos(glm::vec3(0.0f, 0.0f, 4.0f)),
+		Entity(glm::vec3(0.0f, 0.0f, 4.0f)),
 		m_CameraFront(glm::vec3(0.0f, 0.0f, -1.0f)),
 		m_CameraUp(glm::vec3(0.0f, 1.0f, 0.0f))
 	{
@@ -19,32 +18,32 @@ namespace OGLE {
 
 	void PerspectiveCamera::OnUpdate(float dt)
 	{
-		if (Input::IsKeyPressed(OGLE_KEY_ESCAPE))
+		/*if (Input::IsKeyPressed(OGLE_KEY_ESCAPE))
 		{
-			auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow());
+			auto window = Application::Get().GetWindow();
 			glfwSetWindowShouldClose(window, true);
-		}
+		}*/
 
 		float cameraSpeed = 2.5 * dt;
 		if (Input::IsKeyPressed(OGLE_KEY_W))
-			m_CameraPos += cameraSpeed * m_CameraFront;
+			m_Position += cameraSpeed * m_CameraFront;
 		if (Input::IsKeyPressed(OGLE_KEY_S))
-			m_CameraPos -= cameraSpeed * m_CameraFront;
+			m_Position -= cameraSpeed * m_CameraFront;
 		if (Input::IsKeyPressed(OGLE_KEY_A))
-			m_CameraPos -= glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
+			m_Position -= glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
 		if (Input::IsKeyPressed(OGLE_KEY_D))
-			m_CameraPos += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
+			m_Position += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
 		if (Input::IsKeyPressed(OGLE_KEY_SPACE))
-			m_CameraPos += m_CameraUp * cameraSpeed;
+			m_Position += m_CameraUp * cameraSpeed;
 		if (Input::IsKeyPressed(OGLE_KEY_LEFT_SHIFT))
-			m_CameraPos -= m_CameraUp * cameraSpeed;
+			m_Position -= m_CameraUp * cameraSpeed;
 
 		// MOVE THIS TO ANOTHER CLASS
-		if (Input::IsKeyPressed(OGLE_KEY_F2)) 
+		/*if (Input::IsKeyPressed(OGLE_KEY_F2)) 
 		{
 			auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow());
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
+		}*/
 
 		
 		auto mousePos = Input::GetMousePosition();

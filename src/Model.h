@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "Shader.h"
+#include "Renderer/Shader.h"
 #include "Mesh.h"
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"

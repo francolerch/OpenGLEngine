@@ -1,39 +1,23 @@
 #include "pch.h"
 #include "Application.h"
-
-#include "Shader.h"
+#include "Renderer/Shader.h"
 #include "Model.h"
 //#include "Texture.h"
+#include "Entities/PerspectiveCamera.h"
 
 namespace OGLE {
     Application* Application::s_Instance;
-
-    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
-    {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
-
-    static void error_callback(int error, const char* description)
-    {
-        OG_ERROR("GLFW Error ({0}): {1}", error, description);
-    }
 
     Application::Application()
     {
         OG_ASSERT(!s_Instance, "Application already exists!");
         s_Instance = this;
 
-        if (!glfwInit())
-            exit(EXIT_FAILURE);
-
-        m_Window = glfwCreateWindow(WIDTH, HEIGHT, "OpenGLEngine", NULL, NULL);
+        m_Window = CreateScope<Window>();
         //m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
+        Scope<PerspectiveCamera> camera = CreateScope<PerspectiveCamera>();
+        m_Entities.push_back(camera.get());
     };
-
-    Application::~Application()
-    {
-    }
 
     void Application::Run()
     {
@@ -95,35 +79,6 @@ namespace OGLE {
             glm::vec3(-1.3f,  1.0f, -1.5f)
          };
 
-        glfwSetErrorCallback(error_callback);
-
-        
-
-        if (!m_Window)
-        {
-            glfwTerminate();
-            exit(EXIT_FAILURE);
-        }
-
-        glfwSetKeyCallback(m_Window, key_callback);
-
-        glfwMakeContextCurrent(m_Window);
-        int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-        OG_ASSERT(status, "Failed to initialize Glad!");
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
-
-        OG_INFO("OpenGL Info:");
-        OG_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
-        OG_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
-        OG_INFO("  Version: {0}", glGetString(GL_VERSION));
-
-        //glfwSetFramebufferSizeCallback(m_Window, FramebufferSizeCallback);
-        //glfwSetScrollCallback(m_Window, ScrollCallback);
-        //glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-        glEnable(GL_DEPTH_TEST);
-        glfwSwapInterval(1);
-
         //Shader lightingShader("res/shaders/LightingMap.glsl");
         Shader lampShader("res/shaders/Lamp.glsl");
         Shader ourShader("res/shaders/model_loading.glsl");
@@ -164,7 +119,7 @@ namespace OGLE {
 
         glm::vec3 lightPos(1.2f, 0.0f, 2.0f);
 
-        while (!glfwWindowShouldClose(m_Window))
+        while (!m_Window->ShouldClose())
         {
             // per-frame time logic
             // ---------------------
@@ -177,70 +132,61 @@ namespace OGLE {
             //glfwPollEvents();
 
             // Update
-            m_Camera.OnUpdate(deltaTime);
+            m_Entities[0]->OnUpdate(deltaTime);
 
             // render
-        // ------
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            // ------
+            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            ourShader.Bind();
 
+            // view/projection transformations
+            glm::mat4 projection = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
+            glm::mat4 view;// = glm::lookAt(m_Camera.GetCameraPos(), m_Camera.GetCameraFront() + m_Camera.GetCameraPos(), m_Camera.GetCameraUp());
+            ourShader.SetUniformMat4f("projection", projection);
+            ourShader.SetUniformMat4f("view", view);
 
+            // render the loaded model
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
+            model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
+            ourShader.SetUniformMat4f("model", model);
 
+            // be sure to activate shader when setting uniforms/drawing objects
+            //ourShader.Bind();
+            ourShader.SetUniform3f("objectColor", 1.0f, 0.7f, 0.3f);
+            ourShader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
+            ourShader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
+            //ourShader.SetUniform3f("viewPos", m_Camera.GetCameraPos().x, m_Camera.GetCameraPos().y, m_Camera.GetCameraPos().z);
+            ourShader.SetUniform3f("viewPos", 1.f, 1.f, 1.f);
 
-        ourShader.Bind();
+            // material properties
+            //diffuseMap.Bind(0);
+            //specularMap.Bind(1);
+            //lightingShader.SetUniform1i("material.diffuse", 0);
+            //lightingShader.SetUniform1i("material.specular", 1);
+            ourShader.SetUniform1f("material.shininess", 32.0f);
 
-        // view/projection transformations
-        glm::mat4 projection = glm::perspective(glm::radians(60.f), WIDTH / HEIGHT, 0.1f, 100.0f);
-        glm::mat4 view = glm::lookAt(m_Camera.GetCameraPos(), m_Camera.GetCameraFront() + m_Camera.GetCameraPos(), m_Camera.GetCameraUp());
-        ourShader.SetUniformMat4f("projection", projection);
-        ourShader.SetUniformMat4f("view", view);
+            // light properties
+            ourShader.SetUniform3f("light.direction", -0.2f, -1.0f, -0.3f);
+            ourShader.SetUniform3f("light.ambient", 0.3f, 0.3f, 0.3f);
+            ourShader.SetUniform3f("light.diffuse", 0.5f, 0.5f, 0.5f);
+            ourShader.SetUniform3f("light.specular", 1.0f, 1.0f, 1.0f); 
 
-        // render the loaded model
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-        ourShader.SetUniformMat4f("model", model);
+            ourShader.SetUniform1f("light.constant", 1.0f);
+            ourShader.SetUniform1f("light.linear", 0.09f);
+            ourShader.SetUniform1f("light.quadratic", 0.032f);
 
+            // view/projection transformations
+            ourShader.SetUniformMat4f("projection", projection);
+            ourShader.SetUniformMat4f("view", view);
 
+            // world transformation
+            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.f, 1.f, 0.f));
+            ourShader.SetUniformMat4f("model", model);
 
-        // be sure to activate shader when setting uniforms/drawing objects
-        //ourShader.Bind();
-        ourShader.SetUniform3f("objectColor", 1.0f, 0.7f, 0.3f);
-        ourShader.SetUniform3f("lightColor", 1.0f, 1.0f, 1.0f);
-        ourShader.SetUniform3f("lightPos", lightPos.x, lightPos.y, lightPos.z);
-        ourShader.SetUniform3f("viewPos", m_Camera.GetCameraPos().x, m_Camera.GetCameraPos().y, m_Camera.GetCameraPos().z);
-
-        // material properties
-        //diffuseMap.Bind(0);
-        //specularMap.Bind(1);
-        //lightingShader.SetUniform1i("material.diffuse", 0);
-        //lightingShader.SetUniform1i("material.specular", 1);
-        ourShader.SetUniform1f("material.shininess", 32.0f);
-
-        // light properties
-        ourShader.SetUniform3f("light.direction", -0.2f, -1.0f, -0.3f);
-        ourShader.SetUniform3f("light.ambient", 0.3f, 0.3f, 0.3f);
-        ourShader.SetUniform3f("light.diffuse", 0.5f, 0.5f, 0.5f);
-        ourShader.SetUniform3f("light.specular", 1.0f, 1.0f, 1.0f); 
-
-        ourShader.SetUniform1f("light.constant", 1.0f);
-        ourShader.SetUniform1f("light.linear", 0.09f);
-        ourShader.SetUniform1f("light.quadratic", 0.032f);
-
-        // view/projection transformations
-        ourShader.SetUniformMat4f("projection", projection);
-        ourShader.SetUniformMat4f("view", view);
-
-        // world transformation
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.f, 1.f, 0.f));
-        ourShader.SetUniformMat4f("model", model);
-
-        ourModel.Draw(ourShader);
-
-
-
-
+            ourModel.Draw(ourShader);
 
 /*
         //glBindTexture(GL_TEXTURE_2D, 0);
@@ -259,16 +205,12 @@ namespace OGLE {
 
 
 */
-
-
-
-
-            glfwSwapBuffers(m_Window);
-            glfwPollEvents();
+            m_Window->SwapBuffers();
         }
+    }
 
-        glfwDestroyWindow(m_Window);
-
+    Application::~Application() 
+    {
         glfwTerminate();
         exit(EXIT_SUCCESS);
     }

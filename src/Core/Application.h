@@ -1,11 +1,11 @@
 #pragma once
-#include "glad/glad.h"
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include "PerspectiveCamera.h"
+
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "Window.h"
+#include "Entities/Entity.h"
+
 
 namespace OGLE {
 	class Application
@@ -20,13 +20,14 @@ namespace OGLE {
 		void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 		void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 		inline static Application& Get() { return *s_Instance; }
-		inline GLFWwindow* GetWindow() { return m_Window; }
+		inline Window* GetWindow() { return m_Window.get(); }
 
 	private:
 		static Application* s_Instance;
 
-		GLFWwindow* m_Window;
-		PerspectiveCamera m_Camera;
+		Scope<Window> m_Window;
+		//Scope<Renderer> m_Renderer;
+		std::vector<Entity*> m_Entities;
 		const float WIDTH = 800.f;
 		const float HEIGHT = 600.f;
 		float deltaTime = 0.0f;	// time between current frame and last frame

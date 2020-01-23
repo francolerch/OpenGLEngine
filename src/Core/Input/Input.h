@@ -4,6 +4,14 @@
 #include "MouseCodes.h"
 
 namespace OGLE {
+
+	enum KEY_STATE 
+	{
+		RELEASE = 0,
+		PRESS,
+		REPEAT
+	};
+
 	class Input
 	{
 	protected:

@@ -1,20 +1,18 @@
 #pragma once
-#include "glm/glm.hpp"
+#include "Entities/Entity.h"
 
 namespace OGLE {
-	class PerspectiveCamera
+	class PerspectiveCamera : public Entity
 	{
 	public:
 		PerspectiveCamera();
 		~PerspectiveCamera();
 
-		void OnUpdate(float dt);
-		inline const glm::vec3& GetCameraPos() const { return m_CameraPos; };
+		virtual void OnUpdate(float dt) override;
 		inline const glm::vec3& GetCameraFront() const { return m_CameraFront; };
 		inline const glm::vec3& GetCameraUp() const { return m_CameraUp; };
 
 	private:
-		glm::vec3 m_CameraPos;
 		glm::vec3 m_CameraFront;
 		glm::vec3 m_CameraUp;
 		
