@@ -18,6 +18,6 @@ namespace OGLE {
         int32_t GetMouseButton(int32_t button);
         std::pair<float, float> GetMousePos() const;
         bool ShouldClose() const;
-        void SwapBuffers() const;
+        void OnUpdate() const;
     };
 }

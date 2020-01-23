@@ -77,9 +77,14 @@ Window::Window(const unsigned int width, const unsigned int height, const std::s
         return glfwWindowShouldClose(m_Window);
     }
 
-    void Window::SwapBuffers() const 
+    void Window::OnUpdate() const 
     {
-            glfwSwapBuffers(m_Window);
-            glfwPollEvents();
+        /*if (Input::IsKeyPressed(OGLE_KEY_ESCAPE))
+		{
+			auto window = Application::Get().GetWindow();
+			glfwSetWindowShouldClose(window, true);
+		}*/
+        glfwPollEvents();
+        glfwSwapBuffers(m_Window);
     }
 }

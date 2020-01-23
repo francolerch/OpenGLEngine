@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Entities/PerspectiveCamera.h"
 #include "Core/Input/Input.h"
-#include "Core/Input/Keycodes.h"
 
 namespace OGLE {
 	PerspectiveCamera::PerspectiveCamera() :
@@ -18,11 +17,7 @@ namespace OGLE {
 
 	void PerspectiveCamera::OnUpdate(float dt)
 	{
-		/*if (Input::IsKeyPressed(OGLE_KEY_ESCAPE))
-		{
-			auto window = Application::Get().GetWindow();
-			glfwSetWindowShouldClose(window, true);
-		}*/
+		
 
 		float cameraSpeed = 2.5 * dt;
 		if (Input::IsKeyPressed(OGLE_KEY_W))
