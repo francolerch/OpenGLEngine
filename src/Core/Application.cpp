@@ -3,6 +3,7 @@
 #include "Renderer/Shader.h"
 //#include "Texture.h"
 #include "Entities/PerspectiveCamera.h"
+#include "renderer/Renderer.h"
 
 namespace OGLE {
     Application* Application::s_Instance;
@@ -14,6 +15,7 @@ namespace OGLE {
 
         m_Window = CreateScope<Window>();
         //m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
+        Renderer::Init();
         Scope<PerspectiveCamera> camera = CreateScope<PerspectiveCamera>();
         m_Entities.push_back(camera.get());
     };
@@ -46,6 +48,8 @@ namespace OGLE {
 
     Application::~Application() 
     {
+        Renderer::Shutdown();
+        
         glfwTerminate();
         exit(EXIT_SUCCESS);
     }

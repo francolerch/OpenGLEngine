@@ -1,27 +1,24 @@
 #pragma once
 #include "pch.h"
-#include "Core.h"
-#include "VertexArray.h"
-#include "VertexBuffer.h"
-#include "Shader.h"
-#include "Texture.h"
+#include "Core/Core.h"
+#include "renderer/Shader.h"
+#include "renderer/VertexArray.h"
 
-class Renderer
-{
-private:
-    std::vector<VertexArray> m_VAO;
-    std::vector<VertexBuffer> m_BVO;
-    std::vector<Shader> m_Shaders;
-    std::vector<Texture> m_Textures;
-public:
-    Renderer();
-    ~Renderer();
-};
+namespace OGLE {
+	class Renderer
+	{
+	public:
+		static void Init();
+		static void Shutdown();
 
-Renderer::Renderer()
-{
-}
+		static void Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vao, const glm::mat4& transform = glm::mat4(1.0f));
 
-Renderer::~Renderer()
-{
+	private:
+		struct SceneData
+		{
+			glm::mat4 ViewProjectionMatrix;
+		};
+
+		static Scope<SceneData> s_SceneData;
+	};
 }

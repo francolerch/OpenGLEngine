@@ -17,8 +17,6 @@ namespace OGLE {
 
 	void PerspectiveCamera::OnUpdate(float dt)
 	{
-		
-
 		float cameraSpeed = 2.5 * dt;
 		if (Input::IsKeyPressed(OGLE_KEY_W))
 			m_Position += cameraSpeed * m_CameraFront;
