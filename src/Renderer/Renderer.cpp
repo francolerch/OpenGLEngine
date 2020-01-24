@@ -14,15 +14,21 @@ namespace OGLE {
 	void Renderer::Shutdown()
 	{
 	}
+	
+	void Renderer::BeginScene(const PerspectiveCamera& camera)
+	{
+		Renderer::s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vao, const glm::mat4& transform)
 	{
 		shader->Bind();
-		shader->SetMat4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+		shader->SetMat4("u_ViewProjection", Renderer::s_SceneData->ViewProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);
 
 		vao->Bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		// TODO: change this 36
+		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }

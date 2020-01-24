@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Entities/PerspectiveCamera.h"
 #include "Core/Input/Input.h"
+#include "Renderer/Renderer.h"
 
 namespace OGLE {
 	PerspectiveCamera::PerspectiveCamera() :
@@ -17,6 +18,8 @@ namespace OGLE {
 
 	void PerspectiveCamera::OnUpdate(float dt)
 	{
+		Renderer::BeginScene(*this);
+
 		float cameraSpeed = 2.5 * dt;
 		if (Input::IsKeyPressed(OGLE_KEY_W))
 			m_Position += cameraSpeed * m_CameraFront;
@@ -70,5 +73,11 @@ namespace OGLE {
 		direction.y = sin(glm::radians(pitch));
 		direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 		m_CameraFront = glm::normalize(direction);
+	}
+
+	glm::mat4 PerspectiveCamera::GetViewProjectionMatrix() const
+	{
+		glm::mat4 proj = glm::perspective(glm::radians(60.f), 800.f / 600.f, 0.1f, 100.0f);
+		return proj * glm::lookAt(GetPos(), GetCameraFront() + GetPos(), GetCameraUp());
 	}
 }

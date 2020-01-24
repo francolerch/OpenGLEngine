@@ -7,7 +7,7 @@ uniform mediump mat4 u_ViewProjection;
 uniform mediump mat4 u_Transform;
 void main()
 {
-    gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+    gl_Position = u_ViewProjection * u_Transform * vec4(aPos.x, aPos.y, aPos.z, 1.0);
 };
 
 #type fragment

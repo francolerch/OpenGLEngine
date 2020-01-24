@@ -12,5 +12,7 @@ namespace OGLE {
 		IndexBuffer() = default;
 		IndexBuffer(const unsigned int* data, unsigned int count) : Buffer(data, count, GL_ELEMENT_ARRAY_BUFFER) {};
 		~IndexBuffer() = default;
+
+		virtual unsigned int GetCount() const override { return m_Size / sizeof(unsigned int); };
 	};
 }

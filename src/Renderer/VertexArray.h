@@ -17,8 +17,9 @@ namespace OGLE {
         VertexArray();
         ~VertexArray();
 
-        inline IndexBuffer GetIndexBuffer() const { return m_IndexBuffer; };
+        inline const IndexBuffer& GetIndexBuffer() const { return m_IndexBuffer; };
         void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& layout);
+        void AddBuffer(const IndexBuffer& vb);
         void Bind() const;
         void Unbind() const;
     };

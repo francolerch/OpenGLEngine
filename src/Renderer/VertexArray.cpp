@@ -34,6 +34,11 @@ namespace OGLE {
         }
     }
 
+    void VertexArray::AddBuffer(const IndexBuffer& vb)
+    {
+        m_IndexBuffer = vb;
+    }
+
     void VertexArray::Bind() const
     {
         glBindVertexArray(m_RendererId);

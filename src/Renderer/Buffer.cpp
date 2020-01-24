@@ -16,16 +16,6 @@ namespace OGLE {
         glDeleteBuffers(1, &m_RendererId);
     }
 
-    Buffer Buffer::operator=(const Buffer& vb)
-    {
-        m_RendererId = vb.m_RendererId;
-        m_Data = vb.m_Data;
-        m_Size = vb.m_Size;
-        m_Type = vb.m_Type;
-
-        return *this;
-    }
-
     void Buffer::Bind() const
     {
         glBindBuffer(m_Type, m_RendererId);

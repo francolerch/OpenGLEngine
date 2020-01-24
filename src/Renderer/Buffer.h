@@ -13,8 +13,6 @@ namespace OGLE {
     protected:
         Buffer() = default;
         Buffer(const void* data, unsigned int size, GLenum type);
-        Buffer operator=(const Buffer& vb);
-
 
     public:
         virtual ~Buffer();
@@ -24,5 +22,7 @@ namespace OGLE {
         inline void SetData(const void* data, unsigned int size) { m_Data = data; m_Size = size; };
         void Bind() const;
         void UnBind() const;
+
+        virtual unsigned int GetCount() const = 0;
     };
 }

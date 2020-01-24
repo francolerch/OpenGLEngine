@@ -1,12 +1,6 @@
 #include "pch.h"
 #include "Application.h"
-#include "Renderer/Shader.h"
-//#include "Texture.h"
-#include "Renderer/VertexArray.h"
-#include "Entities/PerspectiveCamera.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/VertexBufferLayout.h"
-#include "Renderer/IndexBuffer.h"
+#include "Core/Model.h"
 
 namespace OGLE {
     Application* Application::s_Instance;
@@ -23,26 +17,7 @@ namespace OGLE {
 
     void Application::Run()
     {
-         float vertices[] = {
-            0.5f,  0.5f, 0.0f,  // top right
-            0.5f, -0.5f, 0.0f,  // bottom right
-            -0.5f, -0.5f, 0.0f,  // bottom left
-            -0.5f,  0.5f, 0.0f   // top left 
-        };
-        unsigned int indices[] = {  // note that we start from 0!
-            0, 1, 3,  // first Triangle
-            1, 2, 3   // second Triangle
-        };
-
-        Ref<Shader> shader = CreateRef<Shader>("res/shaders/FlatColor.glsl");
-        Ref<VertexArray> vao = CreateRef<VertexArray>();
-        VertexBuffer vbo(vertices, sizeof(vertices));
-        IndexBuffer ib(indices, sizeof(indices));
-        VertexBufferLayout layout;
-        layout.Push(3);
-        vao->AddBuffer(vbo, layout);
-
-        //PerspectiveCamera camera;
+        Model model("wall/SM_Wall_Damaged_2x1_A.obj");
 
         while (!m_Window->ShouldClose())
         {
@@ -56,8 +31,7 @@ namespace OGLE {
             // ---------------------
 
             // Update
-            //m_Entities[0]->OnUpdate(deltaTime);
-            //camera.OnUpdate(deltaTime);
+            m_Camera.OnUpdate(deltaTime);
 
             // render
             // ------
@@ -65,9 +39,8 @@ namespace OGLE {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glm::mat4 transform(1.0);
-            shader->Bind();
 
-            Renderer::Submit(shader, vao, transform);
+            model.Draw();
 
             m_Window->OnUpdate();
         }

@@ -11,7 +11,7 @@ namespace OGLE {
 		virtual void OnUpdate(float dt) override;
 		inline const glm::vec3& GetCameraFront() const { return m_CameraFront; };
 		inline const glm::vec3& GetCameraUp() const { return m_CameraUp; };
-
+		glm::mat4 GetViewProjectionMatrix() const;
 	private:
 		glm::vec3 m_CameraFront;
 		glm::vec3 m_CameraUp;
