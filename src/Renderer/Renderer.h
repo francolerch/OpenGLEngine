@@ -1,8 +1,8 @@
 #pragma once
 #include "pch.h"
 #include "Core/Core.h"
-#include "renderer/Shader.h"
-#include "renderer/VertexArray.h"
+#include "Renderer/Shader.h"
+#include "Renderer/VertexArray.h"
 
 namespace OGLE {
 	class Renderer

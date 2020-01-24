@@ -1,17 +1,12 @@
 #pragma once
+#include "Renderer/Buffer.h"
 
-struct Vertex {
-    float x, y;
-    float r, g, b;
-};
-
-class VertexBuffer
-{
-private:
-    unsigned int m_RendererId;
-public:
-    VertexBuffer(const void* data, unsigned int size);
-    ~VertexBuffer();
-    void Bind() const;
-    void UnBind() const;
-};
+namespace OGLE {
+    class VertexBuffer : public Buffer
+    {
+    public:
+        VertexBuffer() = default;
+        VertexBuffer(const void* data, unsigned int size) : Buffer(data, size, GL_ARRAY_BUFFER) {};
+        ~VertexBuffer() = default;
+    };
+}

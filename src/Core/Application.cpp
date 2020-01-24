@@ -2,8 +2,11 @@
 #include "Application.h"
 #include "Renderer/Shader.h"
 //#include "Texture.h"
+#include "Renderer/VertexArray.h"
 #include "Entities/PerspectiveCamera.h"
-#include "renderer/Renderer.h"
+#include "Renderer/Renderer.h"
+#include "Renderer/VertexBufferLayout.h"
+#include "Renderer/IndexBuffer.h"
 
 namespace OGLE {
     Application* Application::s_Instance;
@@ -16,12 +19,30 @@ namespace OGLE {
         m_Window = CreateScope<Window>();
         //m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
         Renderer::Init();
-        Scope<PerspectiveCamera> camera = CreateScope<PerspectiveCamera>();
-        m_Entities.push_back(camera.get());
     };
 
     void Application::Run()
     {
+         float vertices[] = {
+            0.5f,  0.5f, 0.0f,  // top right
+            0.5f, -0.5f, 0.0f,  // bottom right
+            -0.5f, -0.5f, 0.0f,  // bottom left
+            -0.5f,  0.5f, 0.0f   // top left 
+        };
+        unsigned int indices[] = {  // note that we start from 0!
+            0, 1, 3,  // first Triangle
+            1, 2, 3   // second Triangle
+        };
+
+        Ref<Shader> shader = CreateRef<Shader>("res/shaders/FlatColor.glsl");
+        Ref<VertexArray> vao = CreateRef<VertexArray>();
+        VertexBuffer vbo(vertices, sizeof(vertices));
+        IndexBuffer ib(indices, sizeof(indices));
+        VertexBufferLayout layout;
+        layout.Push(3);
+        vao->AddBuffer(vbo, layout);
+
+        //PerspectiveCamera camera;
 
         while (!m_Window->ShouldClose())
         {
@@ -36,11 +57,17 @@ namespace OGLE {
 
             // Update
             //m_Entities[0]->OnUpdate(deltaTime);
+            //camera.OnUpdate(deltaTime);
 
             // render
             // ------
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            glm::mat4 transform(1.0);
+            shader->Bind();
+
+            Renderer::Submit(shader, vao, transform);
 
             m_Window->OnUpdate();
         }

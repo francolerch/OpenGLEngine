@@ -1,18 +1,16 @@
 #pragma once
 #include "glad/glad.h"
+#include "Renderer/Buffer.h"
 
-class IndexBuffer
-{
-private:
-	unsigned int m_RendererID;
-	unsigned int m_Count;
+namespace OGLE {
+	class IndexBuffer : public Buffer
+	{
+	private:
+		unsigned int m_RendererID;
 
-public:
-	IndexBuffer(const unsigned int* data, unsigned int count);
-	~IndexBuffer();
-
-	void Bind() const;
-	void Unbind() const;
-
-	inline unsigned int GetCount() const { return m_Count; };
-};
+	public:
+		IndexBuffer() = default;
+		IndexBuffer(const unsigned int* data, unsigned int count) : Buffer(data, count, GL_ELEMENT_ARRAY_BUFFER) {};
+		~IndexBuffer() = default;
+	};
+}

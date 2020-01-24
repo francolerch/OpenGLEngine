@@ -22,7 +22,7 @@ namespace OGLE {
 		shader->SetMat4("u_Transform", transform);
 
 		vao->Bind();
-		glDrawElements(GL_TRIANGLES, vao->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
