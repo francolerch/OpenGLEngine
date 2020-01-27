@@ -6,6 +6,7 @@
 #include "Renderer/Renderer.h"
 #include "Renderer/VertexBufferLayout.h"
 #include "Renderer/IndexBuffer.h"
+#include "Renderer/Texture.h"
 
 namespace OGLE {
     class Model
@@ -17,6 +18,7 @@ namespace OGLE {
         Ref<VertexBuffer> m_VertexBuffer;
         Ref<IndexBuffer> m_IndexBuffer;
         Ref<VertexBufferLayout> m_Layout;
+        Ref<Texture> m_Texture;
 
     public:
         Model(const std::string& path);

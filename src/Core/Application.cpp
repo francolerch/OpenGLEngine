@@ -17,7 +17,7 @@ namespace OGLE {
 
     void Application::Run()
     {
-        Model model("wall/SM_Wall_Damaged_2x1_A.obj");
+        Model model("res/models/me/untitled.obj");
 
         while (!m_Window->ShouldClose())
         {
