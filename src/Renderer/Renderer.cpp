@@ -25,8 +25,8 @@ namespace OGLE {
 		shader->Bind();
 		shader->SetMat4("u_ViewProjection", Renderer::s_SceneData->ViewProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);
-		vao->Bind();
 
+		vao->Bind();
 		unsigned int count = vao->GetIndexBuffer().GetSize() / sizeof(unsigned int) ;
 		glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
 		glBindTexture(GL_TEXTURE_2D, 0);
