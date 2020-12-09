@@ -1,4 +1,4 @@
 # OpenGLEngine
 
 Little OpenGL project.
-Run the script under scripts folder to generate the solution
+Run `git submodule update` and the script under scripts folder to generate the solution
