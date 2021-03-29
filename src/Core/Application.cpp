@@ -11,7 +11,6 @@ namespace OGLE {
         s_Instance = this;
 
         m_Window = CreateScope<Window>();
-        //m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
         Renderer::Init();
     };
 
