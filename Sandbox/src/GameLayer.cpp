@@ -3,6 +3,7 @@
 namespace SANDBOX
 {
 	GameLayer::GameLayer()
+		: Layer("EditorLayer")
 	{
 	}
 

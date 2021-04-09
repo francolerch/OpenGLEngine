@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Entities/Entity.h"
 #include "Entities/PerspectiveCamera.h"
+#include "LayerStack.h"
 
 namespace OGLE {
 	class Application
@@ -21,6 +22,8 @@ namespace OGLE {
 		void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
 		inline static Application& Get() { return *s_Instance; }
 		inline Window* GetWindow() { return m_Window.get(); }
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
 
 	private:
 		static Application* s_Instance;
@@ -33,6 +36,7 @@ namespace OGLE {
 		const float HEIGHT = 600.f;
 		float deltaTime = 0.0f;	// time between current frame and last frame
 		float lastFrame = 0.0f;
+		LayerStack m_LayerStack;
 
 	};
 

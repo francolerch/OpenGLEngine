@@ -10,6 +10,7 @@ namespace SANDBOX
 	public:
 		Sandbox() : Application()
 		{
+			PushLayer(new GameLayer());
 		}
 
 		~Sandbox()

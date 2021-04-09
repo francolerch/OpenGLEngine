@@ -5,15 +5,15 @@ using namespace OGLE;
 
 namespace SANDBOX
 {
-	class GameLayer 
+	class GameLayer : public Layer
 	{
 	public:
 		GameLayer();
 		~GameLayer() = default;
 
-		void OnAttach();
-		void OnDetach();
-		void OnUpdate(float ts);
+		void OnAttach() override;
+		void OnDetach() override;
+		void OnUpdate(float ts) override;
 
 	private:
 	

@@ -31,6 +31,8 @@ namespace OGLE {
 
             // Update
             m_Camera.OnUpdate(deltaTime);
+            for (Layer* layer : m_LayerStack)
+                layer->OnUpdate(deltaTime);
 
             // render
             // ------
@@ -52,6 +54,19 @@ namespace OGLE {
         glfwTerminate();
         exit(EXIT_SUCCESS);
     }
+
+    void Application::PushLayer(Layer* layer)
+    {
+        m_LayerStack.PushLayer(layer);
+        layer->OnAttach();
+    }
+
+    void Application::PushOverlay(Layer* layer)
+    {
+        m_LayerStack.PushOverlay(layer);
+        layer->OnAttach();
+    }
+
 
     void Application::MouseCallback(GLFWwindow* m_Window, double xpos, double ypos)
     {
