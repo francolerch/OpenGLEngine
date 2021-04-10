@@ -28,8 +28,8 @@ namespace OGLE {
 
 		Scope<Window> m_Window;
 		//Scope<Renderer> m_Renderer;
-		const float WIDTH = 800.f;
-		const float HEIGHT = 600.f;
+		const float WIDTH = 1280.f;
+		const float HEIGHT = 720.f;
 		float deltaTime = 0.0f;	// time between current frame and last frame
 		float lastFrame = 0.0f;
 		LayerStack m_LayerStack;
