@@ -6,6 +6,10 @@
 
 #include "Core/Application.h"
 #include "Core/Window.h"
+#include "Core/Input/Input.h"
+#include "Core/Model.h"
 
 #include "Renderer/Renderer.h"
-#include "Core/Input/Input.h"
+
+#include "Scene/Scene.h"
+#include "Scene/Entity.h"

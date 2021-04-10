@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Application.h"
-#include "Core/Model.h"
+#include "Renderer/Renderer.h"
 
 namespace OGLE {
     Application* Application::s_Instance;
@@ -16,7 +16,6 @@ namespace OGLE {
 
     void Application::Run()
     {
-        Model model("res/models/me/untitled.obj");
 
         while (!m_Window->ShouldClose())
         {
@@ -30,7 +29,6 @@ namespace OGLE {
             // ---------------------
 
             // Update
-            m_Camera.OnUpdate(deltaTime);
             for (Layer* layer : m_LayerStack)
                 layer->OnUpdate(deltaTime);
 
@@ -40,8 +38,6 @@ namespace OGLE {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             glm::mat4 transform(1.0);
-
-            model.Draw();
 
             m_Window->OnUpdate();
         }

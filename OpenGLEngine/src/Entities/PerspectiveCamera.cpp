@@ -5,7 +5,7 @@
 
 namespace OGLE {
 	PerspectiveCamera::PerspectiveCamera() :
-		Entity(glm::vec3(0.0f, 0.0f, 4.0f)),
+		m_Position(glm::vec3(0.0f, 0.0f, 4.0f)),
 		m_CameraFront(glm::vec3(0.0f, 0.0f, -1.0f)),
 		m_CameraUp(glm::vec3(0.0f, 1.0f, 0.0f))
 	{
@@ -18,7 +18,7 @@ namespace OGLE {
 
 	void PerspectiveCamera::OnUpdate(float dt)
 	{
-		Renderer::BeginScene(*this);
+		/*Renderer::BeginScene(*this);
 
 		float cameraSpeed = 2.5 * dt;
 		if (Input::IsKeyPressed(OGLE_KEY_W))
@@ -39,7 +39,7 @@ namespace OGLE {
 		{
 			auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow());
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}*/
+		}
 
 		
 		auto mousePos = Input::GetMousePosition();
@@ -73,6 +73,7 @@ namespace OGLE {
 		direction.y = sin(glm::radians(pitch));
 		direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 		m_CameraFront = glm::normalize(direction);
+		*/
 	}
 
 	glm::mat4 PerspectiveCamera::GetViewProjectionMatrix() const

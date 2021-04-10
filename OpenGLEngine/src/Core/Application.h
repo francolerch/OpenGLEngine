@@ -4,8 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "Window.h"
-#include "Entities/Entity.h"
-#include "Entities/PerspectiveCamera.h"
 #include "LayerStack.h"
 
 namespace OGLE {
@@ -30,8 +28,6 @@ namespace OGLE {
 
 		Scope<Window> m_Window;
 		//Scope<Renderer> m_Renderer;
-		PerspectiveCamera m_Camera;
-		std::vector<Entity*> m_Entities;
 		const float WIDTH = 800.f;
 		const float HEIGHT = 600.f;
 		float deltaTime = 0.0f;	// time between current frame and last frame

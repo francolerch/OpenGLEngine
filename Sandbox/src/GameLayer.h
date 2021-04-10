@@ -16,6 +16,9 @@ namespace SANDBOX
 		void OnUpdate(float ts) override;
 
 	private:
-	
+		Ref<Scene> m_ActiveScene;
+		Scope<Entity> m_ActiveCamera;
+
+		Scope<Model> m_Model;
 	};
 }

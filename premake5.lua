@@ -12,6 +12,7 @@ workspace "OpenGLEngine"
     group "Dependencies"
         include "OpenGLEngine/vendor/glfw"
         include "OpenGLEngine/vendor/Glad"
+        include "OpenGLEngine/vendor/entt"
 
     group ""
 
@@ -35,6 +36,8 @@ workspace "OpenGLEngine"
         IncludeDir["spdlog"] = "OpenGlEngine/vendor/spdlog/include"
         IncludeDir["assimp"] = "OpenGlEngine/vendor/assimp/include"
         IncludeDir["stb_image"] = "OpenGlEngine/vendor/stb_image"
+        IncludeDir["entt"] = "OpenGlEngine/vendor/entt/single_include"
+
 
         files {
             "%{prj.name}/src/**.h",
@@ -48,7 +51,8 @@ workspace "OpenGLEngine"
             "%{IncludeDir.glm}",
             "%{IncludeDir.spdlog}",
             "%{IncludeDir.assimp}",
-            "%{IncludeDir.stb_image}"
+            "%{IncludeDir.stb_image}",
+            "%{IncludeDir.entt}"
         }
 
         libdirs {
@@ -116,7 +120,8 @@ workspace "OpenGLEngine"
             "%{IncludeDir.spdlog}",
             "%{IncludeDir.glm}",
             "%{IncludeDir.Glad}",
-            "%{IncludeDir.GLFW}"
+            "%{IncludeDir.GLFW}",
+            "%{IncludeDir.entt}"
         }
 
         links {
