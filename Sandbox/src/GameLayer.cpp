@@ -1,4 +1,5 @@
 ﻿#include "GameLayer.h"
+#include <imgui/imgui.h>
 
 namespace SANDBOX
 {
@@ -20,5 +21,11 @@ namespace SANDBOX
 	void GameLayer::OnUpdate(float ts)
 	{
 		m_Model->Draw();
+	}
+
+	void GameLayer::OnImGuiRender()
+	{
+		static bool show = true;
+		ImGui::ShowDemoWindow(&show);
 	}
 }

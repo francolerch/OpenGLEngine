@@ -16,14 +16,13 @@ namespace OGLE {
 
         m_Window = CreateScope<Window>(WIDTH, HEIGHT);
         Renderer::Init();
+
+        m_ImGuiLayer = CreateScope<ImGuiLayer>();
+        PushOverlay(m_ImGuiLayer.get());
     };
 
     void Application::Run()
     {
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        ImGui_ImplGlfw_InitForOpenGL(m_Window->GetNativeWindow(), true);
-        ImGui_ImplOpenGL3_Init("#version 410");
 
         while (!m_Window->ShouldClose())
         {
@@ -45,26 +44,15 @@ namespace OGLE {
             glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            ImGui_ImplOpenGL3_NewFrame();
-            ImGui_ImplGlfw_NewFrame();
-            ImGui::NewFrame();
-
-            ImGuiIO& io = ImGui::GetIO();
-            io.DisplaySize = ImVec2(WIDTH, HEIGHT);
-
-            static bool show = true;
-            ImGui::ShowDemoWindow(&show);
-
-            ImGui::Render();
-            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            m_ImGuiLayer->Begin();
+            {
+                for (Layer* layer : m_LayerStack)
+                    layer->OnImGuiRender();
+            }
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }
-
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplGlfw_Shutdown();
-        ImGui::DestroyContext();
-
     }
 
     Application::~Application() 

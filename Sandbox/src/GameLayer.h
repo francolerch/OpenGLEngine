@@ -14,6 +14,7 @@ namespace SANDBOX
 		void OnAttach() override;
 		void OnDetach() override;
 		void OnUpdate(float ts) override;
+		void OnImGuiRender() override;
 
 	private:
 		Ref<Scene> m_ActiveScene;

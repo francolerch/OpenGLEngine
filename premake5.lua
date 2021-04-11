@@ -121,6 +121,7 @@ workspace "OpenGLEngine"
         includedirs {
             "%{prj.name}/src",
             "OpenGLEngine/src",
+            "OpenGLEngine/vendor",
             "%{IncludeDir.spdlog}",
             "%{IncludeDir.glm}",
             "%{IncludeDir.Glad}",

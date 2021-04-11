@@ -37,10 +37,14 @@ Window::Window(const unsigned int width, const unsigned int height, const std::s
         OG_ASSERT(status, "Failed to initialize Glad!");
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 
+		int major, minor, revision;
+		glfwGetVersion(&major, &minor, &revision);
+
         OG_INFO("OpenGL Info:");
+		OG_INFO("  Running against GLFW {0}.{1}.{2}", major, minor, revision);
+		OG_INFO("  OpenGL Version {0}, GLSL {1}", glGetString(GL_VERSION), glGetString(GL_SHADING_LANGUAGE_VERSION));
         OG_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
         OG_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
-        OG_INFO("  Version: {0}", glGetString(GL_VERSION));
 
         //glfwSetFramebufferSizeCallback(m_Window, FramebufferSizeCallback);
         //glfwSetScrollCallback(m_Window, ScrollCallback);
