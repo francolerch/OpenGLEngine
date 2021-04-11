@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Core.h"
 #include "glm/glm.hpp"
+#include "Entities/PerspectiveCamera.h"
 
 namespace OGLE
 {
@@ -29,4 +30,17 @@ namespace OGLE
         operator glm::vec4& () { return m_Transform; };
         operator const glm::vec4& () const { return m_Transform; };
     };
+
+	struct CameraComponent
+	{
+		PerspectiveCamera m_Camera;
+
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
+		CameraComponent(const PerspectiveCamera& projection)
+			: m_Camera(projection) {};
+
+		operator PerspectiveCamera& () { return m_Camera; };
+		operator const PerspectiveCamera& () const { return m_Camera; };
+	};
 }

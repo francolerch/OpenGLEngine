@@ -11,5 +11,7 @@
 
 #include "Renderer/Renderer.h"
 
+#include "Entities/PerspectiveCamera.h"
+
 #include "Scene/Scene.h"
 #include "Scene/Entity.h"

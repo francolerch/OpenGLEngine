@@ -6,7 +6,7 @@ namespace SANDBOX
 	GameLayer::GameLayer()
 		: Layer("EditorLayer")
 	{
-		m_Model = CreateScope<Model>("res/models/me/untitled.obj");
+		m_ActiveScene = CreateScope<Scene>();
 	}
 
 	void GameLayer::OnAttach()
@@ -20,7 +20,11 @@ namespace SANDBOX
 
 	void GameLayer::OnUpdate(float ts)
 	{
-		m_Model->Draw();
+		m_ActiveCamera.OnUpdate(ts);
+
+
+		// render
+		m_ActiveScene->OnUpdate(ts, m_ActiveCamera);
 	}
 
 	void GameLayer::OnImGuiRender()

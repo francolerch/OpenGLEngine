@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Core/Core.h"
 #include "entt/entt.hpp"
+#include "Entities/PerspectiveCamera.h"
 
 namespace OGLE
 {
@@ -10,7 +11,7 @@ namespace OGLE
         Scene();
         ~Scene() = default;
 
-        void OnUpdate(float ts);
+        void OnUpdate(float ts, const PerspectiveCamera& camera);
         
         class Entity CreateEntity(const std::string& name = "Entity");
         void DestroyEntity(Entity entity);
@@ -22,9 +23,6 @@ namespace OGLE
         entt::registry m_Registry;
 
         friend class Entity;
-
-        void PreUpdate(float ts);
-        void Update(float ts);
-        void PostUpdate(float ts);
+        PerspectiveCamera m_EditorCamera;
     };
 }

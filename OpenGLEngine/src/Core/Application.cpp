@@ -6,6 +6,8 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
+#include "Model.h"
+
 namespace OGLE {
     Application* Application::s_Instance;
 
@@ -23,6 +25,7 @@ namespace OGLE {
 
     void Application::Run()
     {
+        Model model("res/models/me/untitled.obj");
 
         while (!m_Window->ShouldClose())
         {
@@ -44,6 +47,8 @@ namespace OGLE {
             glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            model.Draw();
+
             m_ImGuiLayer->Begin();
             {
                 for (Layer* layer : m_LayerStack)
@@ -51,6 +56,7 @@ namespace OGLE {
             }
             m_ImGuiLayer->End();
 
+            // Swap Buffers
             m_Window->OnUpdate();
         }
     }

@@ -29,9 +29,9 @@ namespace OGLE {
 			m_Position -= glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
 		if (Input::IsKeyPressed(OGLE_KEY_D))
 			m_Position += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * cameraSpeed;
-		if (Input::IsKeyPressed(OGLE_KEY_SPACE))
+		if (Input::IsKeyPressed(OGLE_KEY_E))
 			m_Position += m_CameraUp * cameraSpeed;
-		if (Input::IsKeyPressed(OGLE_KEY_LEFT_SHIFT))
+		if (Input::IsKeyPressed(OGLE_KEY_Q))
 			m_Position -= m_CameraUp * cameraSpeed;
 
 		// MOVE THIS TO ANOTHER CLASS

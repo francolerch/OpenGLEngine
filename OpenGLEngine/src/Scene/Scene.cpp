@@ -26,23 +26,10 @@ namespace OGLE {
 		    m_Registry.destroy(entity);
 	    }
 
-    void Scene::OnUpdate(float ts)
+    void Scene::OnUpdate(float ts, const PerspectiveCamera& camera)
     {
-        PreUpdate(ts);
-        Update(ts);
-        PostUpdate(ts);
+        Renderer::BeginScene(camera);
+        
     }
 
-    void Scene::PreUpdate(float ts)
-    {
-   
-    }
-
-    void Scene::Update(float ts)
-    {
-    }
-
-    void Scene::PostUpdate(float ts)
-    {
-    }
 }

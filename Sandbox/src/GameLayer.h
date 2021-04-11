@@ -18,8 +18,6 @@ namespace SANDBOX
 
 	private:
 		Ref<Scene> m_ActiveScene;
-		Scope<Entity> m_ActiveCamera;
-
-		Scope<Model> m_Model;
+		PerspectiveCamera m_ActiveCamera;
 	};
 }
