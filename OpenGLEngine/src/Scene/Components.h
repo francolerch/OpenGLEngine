@@ -20,15 +20,15 @@ namespace OGLE
     
     struct TransformComponent
     {
-        glm::vec4 m_Transform { 1.0f };
+        glm::mat4 m_Transform { 1.0f };
 
         TransformComponent() = default;
         TransformComponent(const TransformComponent&) = default;
-        TransformComponent(const glm::vec4& transform)
+        TransformComponent(const glm::mat4& transform)
             : m_Transform(transform) {};
 
-        operator glm::vec4& () { return m_Transform; };
-        operator const glm::vec4& () const { return m_Transform; };
+        operator glm::mat4& () { return m_Transform; };
+        operator const glm::mat4& () const { return m_Transform; };
     };
 
 	struct CameraComponent

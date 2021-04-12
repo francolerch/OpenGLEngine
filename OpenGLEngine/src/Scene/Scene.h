@@ -11,7 +11,7 @@ namespace OGLE
         Scene();
         ~Scene() = default;
 
-        void OnUpdate(float ts, const PerspectiveCamera& camera);
+        void OnUpdate(float ts);
         
         class Entity CreateEntity(const std::string& name = "Entity");
         void DestroyEntity(Entity entity);

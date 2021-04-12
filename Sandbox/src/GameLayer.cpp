@@ -1,17 +1,20 @@
 ﻿#include "GameLayer.h"
 #include <imgui/imgui.h>
+#include "Scene/Components.h"
 
 namespace SANDBOX
 {
 	GameLayer::GameLayer()
 		: Layer("EditorLayer")
 	{
-		m_ActiveScene = CreateScope<Scene>();
 	}
 
 	void GameLayer::OnAttach()
 	{
-		
+		m_ActiveScene = CreateScope<Scene>();
+
+		Entity m_ActiveCamera = m_ActiveScene->CreateEntity("Camera");
+		m_ActiveCamera.AddComponent<CameraComponent>();
 	}
 
 	void GameLayer::OnDetach()
@@ -20,11 +23,10 @@ namespace SANDBOX
 
 	void GameLayer::OnUpdate(float ts)
 	{
-		m_ActiveCamera.OnUpdate(ts);
+		// updates
 
-
-		// render
-		m_ActiveScene->OnUpdate(ts, m_ActiveCamera);
+		// render Scene
+		m_ActiveScene->OnUpdate(ts);
 	}
 
 	void GameLayer::OnImGuiRender()

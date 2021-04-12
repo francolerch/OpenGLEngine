@@ -4,6 +4,7 @@
 #include "Renderer/Renderer.h"
 #include "Components.h"
 #include "Entity.h"
+#include "Scene.h"
 
 namespace OGLE {
 
@@ -26,9 +27,31 @@ namespace OGLE {
 		    m_Registry.destroy(entity);
 	    }
 
-    void Scene::OnUpdate(float ts, const PerspectiveCamera& camera)
+    void Scene::OnUpdate(float ts)
     {
-        Renderer::BeginScene(camera);
+		// Render 2D
+		PerspectiveCamera* mainCamera = nullptr;
+		glm::mat4 cameraTransform { 1.0f };
+
+		{
+			auto view = m_Registry.view<TransformComponent, CameraComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
+
+				mainCamera = &camera.m_Camera;
+				cameraTransform = transform.m_Transform;
+				break;
+			}
+		}
+
+        if (mainCamera)
+        {
+            mainCamera->OnUpdate(ts);
+            Renderer::BeginScene(*mainCamera);
+        }
+
+
         
     }
 
