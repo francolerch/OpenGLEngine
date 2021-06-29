@@ -10,6 +10,8 @@
 #include "Core/Model.h"
 
 #include "Renderer/Renderer.h"
+#include "Renderer/FrameBuffer.h"
+#include "Renderer/Texture.h"
 
 #include "Entities/PerspectiveCamera.h"
 

@@ -19,5 +19,8 @@ namespace SANDBOX
 	private:
 		Ref<Scene> m_ActiveScene;
 		Ref<Entity> m_ActiveCamera;
+		Ref<FrameBuffer> m_FrameBuffer;
+		Model m_Model;
+		Texture tex;
 	};
 }

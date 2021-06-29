@@ -10,6 +10,7 @@ public:
 
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }
+	uint32_t GetRendererID() const { return m_RendererID; }
 
 	unsigned int Get() const { return m_RendererID; };
 	void Bind(unsigned int index) const;

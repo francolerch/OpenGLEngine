@@ -16,3 +16,5 @@
 [submodule "OpenGLEngine/vendor/imgui"]
 	path = OpenGLEngine/vendor/imgui
 	url = https://github.com/francolerch/imgui
+	branch = docking
+

@@ -25,7 +25,6 @@ namespace OGLE {
 
     void Application::Run()
     {
-        Model model("res/models/me/untitled.obj");
 
         while (!m_Window->ShouldClose())
         {
@@ -44,11 +43,7 @@ namespace OGLE {
 
             // render
             // ------
-            glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            model.Draw();
-
+           
             m_ImGuiLayer->Begin();
             {
                 for (Layer* layer : m_LayerStack)

@@ -28,6 +28,10 @@ namespace OGLE
 
 	void ImGuiLayer::Begin()
 	{
+		// Enable Docking
+		ImGuiIO& io = ImGui::GetIO();
+		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
