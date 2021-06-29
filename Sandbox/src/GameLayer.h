@@ -20,7 +20,7 @@ namespace SANDBOX
 		Ref<Scene> m_ActiveScene;
 		Ref<Entity> m_ActiveCamera;
 		Ref<FrameBuffer> m_FrameBuffer;
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		Model m_Model;
-		Texture tex;
 	};
 }

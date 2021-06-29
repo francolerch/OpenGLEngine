@@ -24,6 +24,8 @@ namespace OGLE {
 
 		void Bind();
 		void Unbind();
+		void Resize(uint32_t width, uint32_t height);
+
 	private:
 		uint32_t m_RendererID;
 		uint32_t m_ColorAttachment;

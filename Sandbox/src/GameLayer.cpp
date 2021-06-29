@@ -6,8 +6,7 @@ namespace SANDBOX
 {
 	GameLayer::GameLayer()
 		: Layer("EditorLayer"),
-		m_Model("res/models/me/untitled.obj"),
-		tex("res\\textures\\wall.jpg")
+		m_Model("res/models/me/untitled.obj")
 	{
 
 	}
@@ -32,11 +31,27 @@ namespace SANDBOX
 	void GameLayer::OnUpdate(float ts)
 	{
 		// updates
+
+		if (OGLE::FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+		{
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			//m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+			//m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
+			//m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
+
 		m_ActiveScene->OnUpdate(ts);
 
-		// render Scene
 
-		
+
+		// render Scene
+		m_FrameBuffer->Bind();
+		OGLE::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		OGLE::Renderer::Clear();
+		m_Model.Draw();
+		m_FrameBuffer->Unbind();
 	}
 
 	void GameLayer::OnImGuiRender()
@@ -46,6 +61,8 @@ namespace SANDBOX
 		static bool opt_fullscreen = true;
 		static bool opt_padding = false;
 		static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+
+		// Viewport
 
 		// We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
 		// because it would be confusing to have two docking targets within each others.
@@ -121,21 +138,34 @@ namespace SANDBOX
 
 		ImGui::End();
 
-		ImGui::ShowDemoWindow(&p_open);
-
-		m_FrameBuffer->Bind();
-		OGLE::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		OGLE::Renderer::Clear();
-		m_Model.Draw();
-		m_FrameBuffer->Unbind();
-
-		//uint32_t textureID = tex.GetRendererID();
-		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+		// Editor view
 		ImGui::Begin("Editor", &p_open);
-		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ 320.f, 320.f});
+
+		ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+		m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+
+		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2{ viewportPanelSize.x, viewportPanelSize.y }, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 
-		
+		// Inspector
 
+		ImGui::ShowDemoWindow(&p_open);
+
+		ImGui::Begin("Scene Graph", &p_open);
+		if (ImGui::TreeNode("Scene"))
+		{
+			static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+
+			ImGuiTreeNodeFlags node_flags = base_flags;
+			
+				ImGui::BulletText("Blah blah\nBlah Blah");
+
+			
+
+			ImGui::TreePop();
+		}
+
+		ImGui::End();
 	}
 }
