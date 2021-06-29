@@ -22,6 +22,7 @@ namespace SANDBOX
 
 		Entity m_ActiveCamera = m_ActiveScene->CreateEntity("Camera");
 		m_ActiveCamera.AddComponent<CameraComponent>();
+
 	}
 
 	void GameLayer::OnDetach()
@@ -152,19 +153,130 @@ namespace SANDBOX
 
 		ImGui::ShowDemoWindow(&p_open);
 
-		ImGui::Begin("Scene Graph", &p_open);
-		if (ImGui::TreeNode("Scene"))
+		ImGui::Begin("Scene Hierarchy", &p_open);
+
+		m_ActiveScene->Reg().each([&](auto entityID)
+			{
+				Entity entity{ entityID , m_ActiveScene.get() };
+				
+
+				auto& tag = entity.GetComponent<TagComponent>().m_Tag;
+
+				ImGuiTreeNodeFlags flags = ((m_SelectionContext == entity) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+				flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
+				bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
+				if (ImGui::IsItemClicked())
+				{
+					m_SelectionContext = entity;
+				}
+
+				bool entityDeleted = false;
+				if (ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::MenuItem("Delete Entity"))
+						entityDeleted = true;
+
+					ImGui::EndPopup();
+				}
+
+				if (opened)
+				{
+					/*ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth;
+					bool opened = ImGui::TreeNodeEx((void*)9817239, flags, tag.c_str());
+					if (opened)
+						ImGui::TreePop();
+					*/
+					ImGui::TreePop();
+				}
+
+				if (entityDeleted)
+				{
+					m_ActiveScene->DestroyEntity(entity);
+					if (m_SelectionContext == entity)
+						m_SelectionContext = {};
+				}
+
+			});
+
+		ImGui::Begin("Properties");
+		if (m_SelectionContext)
 		{
-			static ImGuiTreeNodeFlags base_flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+			const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+			if (m_SelectionContext.HasComponent<TransformComponent>())
+			{
+				std::string name = "Transform";
+				TransformComponent& component = m_SelectionContext.GetComponent<TransformComponent>();
+				ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
 
-			ImGuiTreeNodeFlags node_flags = base_flags;
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				float lineHeight = 1.f;//GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+				ImGui::Separator();
+				bool open = ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code(), treeNodeFlags, name.c_str());
+				ImGui::PopStyleVar(
+				);
+				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+				{
+					ImGui::OpenPopup("ComponentSettings");
+				}
+
+				bool removeComponent = false;
+				if (ImGui::BeginPopup("ComponentSettings"))
+				{
+					if (ImGui::MenuItem("Remove component"))
+						removeComponent = true;
+
+					ImGui::EndPopup();
+				}
+
+				if (open)
+				{
+					std::string label = "Translation";
+					glm::vec3& values = component.Translation;
+					float columnWidth = 100.0f;
+					float resetValue = 0.0f;
+
+					ImGuiIO & io = ImGui::GetIO();
+					auto boldFont = io.Fonts->Fonts[0];
+
+					ImGui::PushID(label.c_str());
+
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, columnWidth);
+					ImGui::Text(label.c_str());
+					ImGui::NextColumn();
+
+					//ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+					//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+					ImGui::PushItemWidth(80);
+
+					ImGui::DragFloat("X", &values.x);
+					ImGui::SameLine();
+					ImGui::DragFloat("Y", &values.y);
+					ImGui::SameLine();
+					ImGui::DragFloat("Z", &values.z);
+					ImGui::PopItemWidth();
+
+					
+
+					ImGui::Columns(1);
+
+					ImGui::PopID();
+
+
+
+					ImGui::TreePop();
+				}
+
+				if (removeComponent)
+					m_SelectionContext.RemoveComponent<TransformComponent>();
+			}
 			
-				ImGui::BulletText("Blah blah\nBlah Blah");
-
-			
-
-			ImGui::TreePop();
 		}
+
+		ImGui::End();
+
+		
 
 		ImGui::End();
 	}

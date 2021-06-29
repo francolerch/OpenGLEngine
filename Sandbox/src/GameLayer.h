@@ -22,5 +22,7 @@ namespace SANDBOX
 		Ref<FrameBuffer> m_FrameBuffer;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		Model m_Model;
+		Entity m_SelectionContext;
+
 	};
 }

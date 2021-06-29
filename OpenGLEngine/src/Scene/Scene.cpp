@@ -40,7 +40,7 @@ namespace OGLE {
 				auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
 				mainCamera = &camera.m_Camera;
-				cameraTransform = transform.m_Transform;
+				cameraTransform = transform.GetTransform();
 				break;
 			}
 		}
