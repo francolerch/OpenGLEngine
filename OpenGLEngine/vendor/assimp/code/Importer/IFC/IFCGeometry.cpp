@@ -138,9 +138,8 @@ void ProcessPolygonBoundaries(TempMesh& result, const TempMesh& inmesh, size_t m
             }
         }
     }
-	if (outer_polygon_it == end) {
-		return;
-	}
+
+    ai_assert(outer_polygon_it != end);
 
     const size_t outer_polygon_size = *outer_polygon_it;
     const IfcVector3& master_normal = normals[std::distance(begin, outer_polygon_it)];

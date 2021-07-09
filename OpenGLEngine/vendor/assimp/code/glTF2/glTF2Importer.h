@@ -84,7 +84,6 @@ private:
     void ImportLights(glTF2::Asset& a);
     void ImportNodes(glTF2::Asset& a);
     void ImportAnimations(glTF2::Asset& a);
-    void ImportCommonMetadata(glTF2::Asset& a);
 };
 
 } // Namespace assimp

@@ -35,7 +35,7 @@ workspace "OpenGLEngine"
         IncludeDir["Glad"] = "OpenGlEngine/vendor/Glad/include"
         IncludeDir["glm"] = "OpenGlEngine/vendor/glm"
         IncludeDir["spdlog"] = "OpenGlEngine/vendor/spdlog/include"
-        IncludeDir["assimp"] = "OpenGlEngine/vendor/assimp/include"
+        IncludeDir["assimp"] = "OpenGlEngine/vendor/assimp/build/include"
         IncludeDir["stb_image"] = "OpenGlEngine/vendor/stb_image"
         IncludeDir["entt"] = "OpenGlEngine/vendor/entt/single_include"
         IncludeDir["ImGui"] = "OpenGlEngine/vendor/imgui"
@@ -59,7 +59,7 @@ workspace "OpenGLEngine"
         }
 
         libdirs {
-            "%{prj.name}vendor/assimp/lib"
+            "%{prj.name}/vendor/assimp/build/lib"
         }
 
         filter "system:linux"
@@ -126,11 +126,17 @@ workspace "OpenGLEngine"
             "%{IncludeDir.glm}",
             "%{IncludeDir.Glad}",
             "%{IncludeDir.GLFW}",
-            "%{IncludeDir.entt}"
+            "%{IncludeDir.entt}",
+            "%{IncludeDir.assimp}"
+        }
+
+        libdirs {
+            "%{prj.name}../OpenGlEngine/vendor/assimp/build/lib"
         }
 
         links {
-            "OpenGLEngine"
+            "OpenGLEngine",
+            "assimp-vc142-mtd"
         }
 
         filter "system:windows"

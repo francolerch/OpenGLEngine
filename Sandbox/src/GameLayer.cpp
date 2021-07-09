@@ -6,7 +6,7 @@ namespace SANDBOX
 {
 	GameLayer::GameLayer()
 		: Layer("EditorLayer"),
-		m_Model("res/models/me/untitled.obj")
+		m_Model("res/models/me/cube.obj")
 	{
 
 	}
@@ -22,6 +22,8 @@ namespace SANDBOX
 
 		Entity m_ActiveCamera = m_ActiveScene->CreateEntity("Camera");
 		m_ActiveCamera.AddComponent<CameraComponent>();
+
+		
 
 	}
 

@@ -7,9 +7,6 @@
 [submodule "OpenGLEngine/vendor/spdlog"]
 	path = OpenGLEngine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "OpenGLEngine/vendor/assimp"]
-	path = OpenGLEngine/vendor/assimp
-	url = https://github.com/assimp/assimp.git
 [submodule "OpenGLEngine/vendor/entt"]
 	path = OpenGLEngine/vendor/entt
 	url = https://github.com/francolerch/entt

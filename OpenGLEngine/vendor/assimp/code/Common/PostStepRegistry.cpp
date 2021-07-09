@@ -131,13 +131,9 @@ corresponding preprocessor flag to selectively disable steps.
 #if (!defined ASSIMP_BUILD_NO_GLOBALSCALE_PROCESS)
 #   include "PostProcessing/ScaleProcess.h"
 #endif
-#if (!defined ASSIMP_BUILD_NO_ARMATUREPOPULATE_PROCESS)
-#   include "PostProcessing/ArmaturePopulate.h"
-#endif
 #if (!defined ASSIMP_BUILD_NO_GENBOUNDINGBOXES_PROCESS)
 #   include "PostProcessing/GenBoundingBoxesProcess.h"
 #endif
-
 
 
 namespace Assimp {
@@ -183,9 +179,6 @@ void GetPostProcessingStepInstanceList(std::vector< BaseProcess* >& out)
 #endif
 #if (!defined ASSIMP_BUILD_NO_GLOBALSCALE_PROCESS)
     out.push_back( new ScaleProcess());
-#endif
-#if (!defined ASSIMP_BUILD_NO_ARMATUREPOPULATE_PROCESS)
-    out.push_back( new ArmaturePopulate());
 #endif
 #if (!defined ASSIMP_BUILD_NO_PRETRANSFORMVERTICES_PROCESS)
     out.push_back( new PretransformVertices());

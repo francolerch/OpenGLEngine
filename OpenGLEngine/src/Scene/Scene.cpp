@@ -48,7 +48,7 @@ namespace OGLE {
         if (mainCamera)
         {
             mainCamera->OnUpdate(ts);
-            Renderer::BeginScene(*mainCamera);
+            //Renderer::BeginScene(*mainCamera);
         }
 
 

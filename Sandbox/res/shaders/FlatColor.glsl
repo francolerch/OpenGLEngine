@@ -2,8 +2,8 @@
 #version 310 es
 
 layout (location = 0) in vec3 aPos;
-layout (location = 1) in vec3 aTexCoords;
-layout (location = 2) in vec3 aNormal;
+layout (location = 1) in vec3 aNormal;
+layout (location = 2) in vec3 aTexCoords;
 
 uniform mediump mat4 u_ViewProjection;
 uniform mediump mat4 u_Transform;
@@ -21,6 +21,8 @@ void main()
 #type fragment
 #version 310 es
 
+sampler2D texture;
+
 out mediump vec4 FragColor;
 
 in mediump vec3 normal;
@@ -28,6 +30,6 @@ in mediump vec3 texCoords;
 
 void main()
 {
-    mediump vec3 color = vec3(1.0f, 1.0f, 1.0f);
-    FragColor = vec4(normal, 1.0f);
+    mediump vec3 color = vec3(1.0f, 0.0f, 0.0f);
+    FragColor = vec4(color, 1.0f);
 };

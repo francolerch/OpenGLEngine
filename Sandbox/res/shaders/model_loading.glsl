@@ -8,16 +8,15 @@ out vec3 FragPos;
 out vec3 Normal;
 out vec2 TexCoords;
 
-uniform mediump mat4 model;
-uniform mediump mat4 view;
-uniform mediump mat4 projection;
+uniform mediump mat4 u_Transform;
+uniform mediump mat4 u_ViewProjection;
 
 void main()
 {
-    FragPos = vec3(model * vec4(aPos, 1.0));
-    Normal = mat3(transpose(inverse(model))) * aNormal;  
+    FragPos = vec3(u_Transform * vec4(aPos, 1.0));
+    Normal = mat3(transpose(inverse(u_Transform))) * aNormal;  
     TexCoords = aTexCoords;
-    gl_Position = projection * view * vec4(FragPos, 1.0);
+    gl_Position = u_ViewProjection * vec4(FragPos, 1.0);
 }
 
 #type fragment

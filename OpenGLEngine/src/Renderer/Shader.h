@@ -20,6 +20,8 @@ public:
 	Shader(const std::string& filepath);
 	~Shader();
 
+	unsigned int GetRendererID() const { return m_RendererID; }
+
 	void Bind() const;
 	void Unbind() const;
 

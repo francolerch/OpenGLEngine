@@ -35,11 +35,11 @@ namespace OGLE {
 			m_Position -= m_CameraUp * cameraSpeed;
 
 		// MOVE THIS TO ANOTHER CLASS
-		/*if (Input::IsKeyPressed(OGLE_KEY_F2)) 
+		/*if (Input::IsKeyPressed(OGLE_KEY_F2))
 		{
 			auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow());
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-		}
+		}*/
 
 		
 		auto mousePos = Input::GetMousePosition();
@@ -73,7 +73,7 @@ namespace OGLE {
 		direction.y = sin(glm::radians(pitch));
 		direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 		m_CameraFront = glm::normalize(direction);
-		*/
+		
 	}
 
 	glm::mat4 PerspectiveCamera::GetViewProjectionMatrix() const
