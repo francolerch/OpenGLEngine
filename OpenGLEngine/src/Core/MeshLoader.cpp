@@ -8,10 +8,10 @@ namespace OGLE {
 		loadModel(path);
 	}
 
-	void MeshLoader::Draw(const Ref<Shader>& shader)
+	void MeshLoader::Draw(const Ref<Shader>& shader, const glm::mat4& transform)
 	{
 		for (unsigned int i = 0; i < meshes.size(); i++)
-			meshes[i].Draw(shader);
+			meshes[i].Draw(shader, transform);
 	}
 
 	void MeshLoader::loadModel(string path)

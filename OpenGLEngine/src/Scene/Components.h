@@ -4,6 +4,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "Entities/PerspectiveCamera.h"
+#include "Core/Model.h"
 
 namespace OGLE
 {
@@ -52,5 +53,17 @@ namespace OGLE
 
 		operator PerspectiveCamera& () { return m_Camera; };
 		operator const PerspectiveCamera& () const { return m_Camera; };
+	};
+
+	struct RenderComponent
+	{
+		Model m_Model;
+
+		RenderComponent(const std::string& path)
+			: m_Model(path) {};
+
+		operator Model& () { return m_Model; };
+		operator const Model& () const { return m_Model; };
+
 	};
 }

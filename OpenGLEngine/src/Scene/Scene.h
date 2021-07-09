@@ -12,6 +12,7 @@ namespace OGLE
         ~Scene() = default;
 
         void OnUpdate(float ts);
+        void OnDraw();
         
         class Entity CreateEntity(const std::string& name = "Entity");
         void DestroyEntity(Entity entity);

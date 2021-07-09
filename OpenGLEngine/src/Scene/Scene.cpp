@@ -29,7 +29,7 @@ namespace OGLE {
 
     void Scene::OnUpdate(float ts)
     {
-		// Render 2D
+		// Render
 		PerspectiveCamera* mainCamera = nullptr;
 		glm::mat4 cameraTransform { 1.0f };
 
@@ -54,5 +54,19 @@ namespace OGLE {
 
         
     }
+
+	void Scene::OnDraw()
+	{
+		{
+			auto view = m_Registry.view<TransformComponent, RenderComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, render] = view.get<TransformComponent, RenderComponent>(entity);
+
+				render.m_Model.Draw(transform.GetTransform());
+				break;
+			}
+		}
+	}
 
 }

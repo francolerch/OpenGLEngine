@@ -42,7 +42,7 @@ namespace OGLE {
 		}*/
 
 		
-		auto mousePos = Input::GetMousePosition();
+		/*auto mousePos = Input::GetMousePosition();
 		if(firstMouse)
 		{
 			lastX = mousePos.first;
@@ -73,7 +73,7 @@ namespace OGLE {
 		direction.y = sin(glm::radians(pitch));
 		direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 		m_CameraFront = glm::normalize(direction);
-		
+		*/
 	}
 
 	glm::mat4 PerspectiveCamera::GetViewProjectionMatrix() const

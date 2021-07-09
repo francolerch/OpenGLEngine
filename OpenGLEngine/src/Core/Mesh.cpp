@@ -11,10 +11,10 @@ OGLE::Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned
 	setupMesh();
 }
 
-void OGLE::Mesh::Draw(const Ref<Shader>& shader)
+void OGLE::Mesh::Draw(const Ref<Shader>& shader, const glm::mat4& transform )
 {
-	glm::mat4 transform = glm::mat4(1.0f);
-	transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+	//glm::mat4 transform = glm::mat4(1.0f);
+	//transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
 
 	// bind appropriate textures
 	unsigned int diffuseNr = 1;

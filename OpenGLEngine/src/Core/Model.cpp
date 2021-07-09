@@ -31,12 +31,10 @@ namespace OGLE {
         //m_Texture = CreateRef<Texture>("res/texture/wall.jpg");
     }
 
-    void Model::Draw() 
+    void Model::Draw(const glm::mat4& transform)
     {
-        glm::mat4 transform = glm::mat4(1.0f);
-        transform = glm::rotate(transform, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
         //transform = glm::translate(transform, glm::vec3(0.0f, 0.0f, 0.0f));
         //Renderer::Submit(m_Shader, m_VertexArray, transform);
-        m_loader.Draw(m_Shader);
+        m_loader.Draw(m_Shader, transform);
     }
 }

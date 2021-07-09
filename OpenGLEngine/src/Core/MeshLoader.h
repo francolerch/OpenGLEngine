@@ -13,7 +13,7 @@ namespace OGLE
 	{
 	public:
 		MeshLoader(const std::string& path);
-		void Draw(const Ref<Shader>& shader);
+		void Draw(const Ref<Shader>& shader, const glm::mat4& transform);
 	private:
 		// model data
 		std::vector<Mesh> meshes;

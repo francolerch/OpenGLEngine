@@ -5,8 +5,7 @@
 namespace SANDBOX
 {
 	GameLayer::GameLayer()
-		: Layer("EditorLayer"),
-		m_Model("res/models/me/cube.obj")
+		: Layer("EditorLayer")
 	{
 
 	}
@@ -23,7 +22,8 @@ namespace SANDBOX
 		Entity m_ActiveCamera = m_ActiveScene->CreateEntity("Camera");
 		m_ActiveCamera.AddComponent<CameraComponent>();
 
-		
+		Entity Cube = m_ActiveScene->CreateEntity("Cube");
+		Cube.AddComponent<RenderComponent>("res/models/me/cube.obj");
 
 	}
 
@@ -53,7 +53,7 @@ namespace SANDBOX
 		m_FrameBuffer->Bind();
 		OGLE::Renderer::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		OGLE::Renderer::Clear();
-		m_Model.Draw();
+		m_ActiveScene->OnDraw();
 		m_FrameBuffer->Unbind();
 	}
 
@@ -199,6 +199,19 @@ namespace SANDBOX
 				}
 
 			});
+		
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+			m_SelectionContext = {};
+
+		// Right-click on blank space
+		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		{
+			if (ImGui::MenuItem("Create Empty Entity"))
+				m_ActiveScene->CreateEntity("Empty Entity");
+
+			ImGui::EndPopup();
+		}
+		ImGui::End();
 
 		ImGui::Begin("Properties");
 		if (m_SelectionContext)
@@ -252,20 +265,64 @@ namespace SANDBOX
 					//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
 					ImGui::PushItemWidth(80);
 
-					ImGui::DragFloat("X", &values.x);
+					ImGui::DragFloat("X", &values.x, 0.1f);
 					ImGui::SameLine();
-					ImGui::DragFloat("Y", &values.y);
+					ImGui::DragFloat("Y", &values.y, 0.1f);
 					ImGui::SameLine();
-					ImGui::DragFloat("Z", &values.z);
+					ImGui::DragFloat("Z", &values.z, 0.1f);
 					ImGui::PopItemWidth();
-
-					
 
 					ImGui::Columns(1);
 
 					ImGui::PopID();
 
+					label = "Rotation";
+					glm::vec3& values2 = component.Rotation;
+					ImGui::PushID(label.c_str());
 
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, columnWidth);
+					ImGui::Text(label.c_str());
+					ImGui::NextColumn();
+
+					//ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+					//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+					ImGui::PushItemWidth(80);
+
+					ImGui::DragFloat("X", &values2.x, 0.1f);
+					ImGui::SameLine();
+					ImGui::DragFloat("Y", &values2.y, 0.1f);
+					ImGui::SameLine();
+					ImGui::DragFloat("Z", &values2.z, 0.1f);
+					ImGui::PopItemWidth();
+
+					ImGui::Columns(1);
+
+					ImGui::PopID();
+
+					label = "Scale";
+					glm::vec3& values3 = component.Scale;
+					ImGui::PushID(label.c_str());
+
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, columnWidth);
+					ImGui::Text(label.c_str());
+					ImGui::NextColumn();
+
+					//ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+					//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+					ImGui::PushItemWidth(80);
+
+					ImGui::DragFloat("X", &values3.x, 0.1f, 0.f, 1000.f);
+					ImGui::SameLine();
+					ImGui::DragFloat("Y", &values3.y, 0.1f, 0.f, 1000.f);
+					ImGui::SameLine();
+					ImGui::DragFloat("Z", &values3.z, 0.1f, 0.f, 1000.f);
+					ImGui::PopItemWidth();
+
+					ImGui::Columns(1);
+
+					ImGui::PopID();
 
 					ImGui::TreePop();
 				}
@@ -274,11 +331,7 @@ namespace SANDBOX
 					m_SelectionContext.RemoveComponent<TransformComponent>();
 			}
 			
-		}
-
-		ImGui::End();
-
-		
+		}	
 
 		ImGui::End();
 	}

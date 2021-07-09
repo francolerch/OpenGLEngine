@@ -27,6 +27,6 @@ namespace OGLE {
         Model(const std::string& path);
         ~Model() = default;
 
-        void Draw();
+        void Draw(const glm::mat4& transform);
     };
 }

@@ -50,7 +50,7 @@ namespace OGLE {
 		Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<MeshTexture>& textures);
 
 		// render the mesh
-		void Draw(const Ref<Shader>& shader);
+		void Draw(const Ref<Shader>& shader, const glm::mat4& transform);
 
 	private:
 		// render data 
