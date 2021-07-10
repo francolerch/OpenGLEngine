@@ -19,6 +19,9 @@ namespace OGLE {
 	void Renderer::BeginScene(const PerspectiveCamera& camera)
 	{
 		Renderer::s_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		Renderer::s_SceneData->ViewMatrix = camera.GetViewMatrix();
+		Renderer::s_SceneData->ProjectionMatrix = camera.GetProjectionMatrix();
+
 	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vao, const glm::mat4& transform)

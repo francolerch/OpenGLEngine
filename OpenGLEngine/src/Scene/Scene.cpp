@@ -52,7 +52,16 @@ namespace OGLE {
         }
 
 
-        
+		{
+			auto view = m_Registry.view<TransformComponent, DirectionalLightComponent>();
+			for (auto entity : view)
+			{
+				auto [transform, light] = view.get<TransformComponent, DirectionalLightComponent>(entity);
+
+				m_DirectionalLight = transform.Translation;
+				break;
+			}
+		}
     }
 
 	void Scene::OnDraw()
@@ -63,6 +72,7 @@ namespace OGLE {
 			{
 				auto [transform, render] = view.get<TransformComponent, RenderComponent>(entity);
 
+				render.m_Model.GetShader()->SetUniformVec3f("lightPos", m_DirectionalLight);
 				render.m_Model.Draw(transform.GetTransform());
 				break;
 			}

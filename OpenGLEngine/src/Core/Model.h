@@ -28,5 +28,6 @@ namespace OGLE {
         ~Model() = default;
 
         void Draw(const glm::mat4& transform);
+        const Ref<Shader>& GetShader() { return m_Shader; };
     };
 }

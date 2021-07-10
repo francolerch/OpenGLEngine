@@ -9,7 +9,9 @@ namespace OGLE {
 		m_CameraFront(glm::vec3(0.0f, 0.0f, -1.0f)),
 		m_CameraUp(glm::vec3(0.0f, 1.0f, 0.0f))
 	{
-		
+		m_ViewMatrix = glm::lookAt(GetPos(), GetCameraFront() + GetPos(), GetCameraUp());
+		m_ProjectionMatrix = glm::perspective(glm::radians(60.f), 800.f / 600.f, 0.1f, 100.0f);
+
 	}
 
 	PerspectiveCamera::~PerspectiveCamera()
@@ -76,7 +78,7 @@ namespace OGLE {
 		*/
 	}
 
-	glm::mat4 PerspectiveCamera::GetViewProjectionMatrix() const
+	const glm::mat4& PerspectiveCamera::GetViewProjectionMatrix() const
 	{
 		glm::mat4 proj = glm::perspective(glm::radians(60.f), 800.f / 600.f, 0.1f, 100.0f);
 		return proj * glm::lookAt(GetPos(), GetCameraFront() + GetPos(), GetCameraUp());

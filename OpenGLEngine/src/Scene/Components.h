@@ -66,4 +66,12 @@ namespace OGLE
 		operator const Model& () const { return m_Model; };
 
 	};
+
+	struct DirectionalLightComponent
+	{
+		float m_Intensity = 1.f;
+		glm::vec3 m_Color;
+
+		DirectionalLightComponent(glm::vec3 color = glm::vec3(1.f), float intensity = 1.f) {};
+	};
 }

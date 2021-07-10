@@ -11,7 +11,7 @@ namespace OGLE {
     Model::Model(const std::string& path)
         : m_loader(path)
     {
-        m_Shader = CreateRef<Shader>("res/shaders/FlatColor.glsl");
+        m_Shader = CreateRef<Shader>("assets/shaders/FlatColor.glsl");
 
 
         //OBJLoader loader(path);

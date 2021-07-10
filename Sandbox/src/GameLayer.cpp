@@ -7,6 +7,8 @@ namespace SANDBOX
 	GameLayer::GameLayer()
 		: Layer("EditorLayer")
 	{
+		m_DirectoryIcon = CreateRef<Texture>("resources/Icons/ContentBrowser/DirectoryIcon.png");
+		m_FileIcon = CreateRef<Texture>("resources/Icons/ContentBrowser/FileIcon.png");
 
 	}
 
@@ -23,7 +25,10 @@ namespace SANDBOX
 		m_ActiveCamera.AddComponent<CameraComponent>();
 
 		Entity Cube = m_ActiveScene->CreateEntity("Cube");
-		Cube.AddComponent<RenderComponent>("res/models/me/cube.obj");
+		Cube.AddComponent<RenderComponent>("assets/models/me/cube.obj");
+
+		Entity DirectionalLight = m_ActiveScene->CreateEntity("Directional Light");
+		DirectionalLight.AddComponent<DirectionalLightComponent>();
 
 	}
 
@@ -330,8 +335,120 @@ namespace SANDBOX
 				if (removeComponent)
 					m_SelectionContext.RemoveComponent<TransformComponent>();
 			}
+
+			if (m_SelectionContext.HasComponent<DirectionalLightComponent>())
+			{
+				std::string name = "Direcional Light";
+				DirectionalLightComponent& component = m_SelectionContext.GetComponent<DirectionalLightComponent>();
+				ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 4, 4 });
+				float lineHeight = 1.f;//GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+				ImGui::Separator();
+				bool open = ImGui::TreeNodeEx((void*)typeid(DirectionalLightComponent).hash_code(), treeNodeFlags, name.c_str());
+				ImGui::PopStyleVar(
+				);
+				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+				{
+					ImGui::OpenPopup("ComponentSettings");
+				}
+
+				if (open)
+				{
+					std::string label = "Intensity";
+					float columnWidth = 100.0f;
+					float resetValue = 0.0f;
+
+					ImGuiIO& io = ImGui::GetIO();
+					auto boldFont = io.Fonts->Fonts[0];
+
+					ImGui::PushID(label.c_str());
+
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, columnWidth);
+					ImGui::Text(label.c_str());
+					ImGui::NextColumn();
+
+					//ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+					//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 });
+					ImGui::PushItemWidth(80);
+
+					ImGui::DragFloat("X", &component.m_Intensity, 0.01f);
+					ImGui::PopItemWidth();
+
+					ImGui::Columns(1);
+
+					ImGui::PopID();
+
+
+					ImGui::TreePop();
+				}
+			}
 			
 		}	
+
+		ImGui::End();
+
+
+		// Editor view
+		ImGui::Begin("Content Browser", &p_open);
+
+		
+		static std::filesystem::path s_AssetsDirectory = "assets";
+
+
+		if (m_CurrentDirectory != std::filesystem::path(s_AssetsDirectory))
+		{
+			if (ImGui::Button("<-"))
+			{
+				m_CurrentDirectory = m_CurrentDirectory.parent_path();
+			}
+		}
+
+		static float padding = 0.f;
+		static float thumbnailSize = 75;
+		float cellsize = thumbnailSize + padding;
+
+		float panelWidth = ImGui::GetContentRegionAvail().x;
+		int columnCount = (int)(panelWidth / cellsize);
+		if (columnCount < 1)
+		{
+			columnCount = 1;
+		}
+
+		ImGui::Columns(columnCount, 0, false);
+
+
+		for (const auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
+		{
+			const auto& path = directoryEntry.path();
+			auto relativePath = std::filesystem::relative(path, s_AssetsDirectory);
+			std::string filenameString = relativePath.filename().string();
+
+			Ref<Texture> icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
+
+			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize });
+
+			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
+			{
+				if (directoryEntry.is_directory())
+				{
+					m_CurrentDirectory /= path.filename();
+
+				}
+			}
+			float font_size = ImGui::GetFontSize() * filenameString.size();
+			//ImGui::SetCursorPosX((thumbnailSize - font_size) * 0.5f);
+
+			ImGui::TextWrapped(filenameString.c_str());
+			ImGui::NextColumn();
+
+		}
+		ImGui::Columns(1);
+
+		ImGui::SliderFloat("Thumbnail Size", &thumbnailSize, 50, 150);
+		ImGui::SliderFloat("Padding Size", &padding, 0, 16);
 
 		ImGui::End();
 	}

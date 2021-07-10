@@ -25,5 +25,6 @@ namespace OGLE
 
         friend class Entity;
         PerspectiveCamera m_EditorCamera;
+        glm::vec3 m_DirectionalLight = glm::vec3(1.0f);
     };
 }

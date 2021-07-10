@@ -23,5 +23,9 @@ namespace SANDBOX
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 		Entity m_SelectionContext;
 
+		std::filesystem::path m_CurrentDirectory = "assets";
+		Ref<Texture> m_DirectoryIcon;
+		Ref<Texture> m_FileIcon;
+
 	};
 }

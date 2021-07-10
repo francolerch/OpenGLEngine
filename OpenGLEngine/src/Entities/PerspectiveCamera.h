@@ -11,15 +11,21 @@ namespace OGLE {
 		~PerspectiveCamera();
 
 		void OnUpdate(float dt);
-		inline const glm::vec3& GetCameraFront() const { return m_CameraFront; };
-		inline const glm::vec3& GetCameraUp() const { return m_CameraUp; };
-		glm::mat4 GetViewProjectionMatrix() const;
-		inline glm::vec3 GetPos() const { return m_Position; };
+		const glm::vec3& GetCameraFront() const { return m_CameraFront; };
+		const glm::vec3& GetCameraUp() const { return m_CameraUp; };
+
+		const glm::mat4& GetViewProjectionMatrix() const;
+		const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+		const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
+		glm::vec3 GetPos() const { return m_Position; };
 
 	private:
 		glm::vec3 m_CameraFront;
 		glm::vec3 m_CameraUp;
 		glm::vec3 m_Position;
+
+		glm::mat4 m_ProjectionMatrix;
+		glm::mat4 m_ViewMatrix;
 		
 		bool firstMouse = true;
 		float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
